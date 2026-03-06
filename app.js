@@ -68,9 +68,9 @@ function selectRole(role) {
     el.style.display = role === 'admin' ? '' : 'none';
   });
 
-  // FAB visibility (only for applicant roles)
-  const fab = document.getElementById('fabNewApp');
-  if (fab) fab.style.display = (role === 'employee' || role === 'manager') ? '' : 'none';
+  // New Application button visibility (only for applicant roles)
+  const newAppBtn = document.getElementById('newAppBtn');
+  if (newAppBtn) newAppBtn.style.display = (role === 'employee' || role === 'manager') ? 'flex' : 'none';
 
   // Build bottom tabs
   buildBottomTabs(role);
@@ -156,9 +156,10 @@ function navigateTo(page, id) {
     if (btn.dataset.tab === page) btn.classList.add('active');
   });
 
-  const fab = document.getElementById('fabNewApp');
-  if (fab) {
-    fab.style.display = (page === 'newApplication' || !(currentRole === 'employee' || currentRole === 'manager')) ? 'none' : '';
+  // Hide new app button when not on dashboard
+  const newAppBtn = document.getElementById('newAppBtn');
+  if (newAppBtn) {
+    newAppBtn.style.display = (page === 'dashboard' && (currentRole === 'employee' || currentRole === 'manager')) ? 'flex' : 'none';
   }
 
   document.querySelector('main').scrollTop = 0;
@@ -301,7 +302,7 @@ function calcDays() {
   if (start && end) {
     const s = new Date(start);
     const e = new Date(end);
-    const diff = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
+    const diff = Math.round((e - s) / (1000 * 60 * 60 * 24)) + 1; // 包含首尾日
     document.getElementById('totalDays').value = diff > 0 ? diff + ' 天' : '日期有誤';
   }
 }

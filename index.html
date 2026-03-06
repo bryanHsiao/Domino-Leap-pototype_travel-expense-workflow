@@ -134,28 +134,30 @@
       <!-- Page: Dashboard -->
       <div id="page-dashboard" class="page p-4 md:p-6 space-y-4 md:space-y-6">
         <!-- Stats Cards (2x2 on mobile) -->
-        <div id="statsCards" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-          <div onclick="filterByStatus('all')" class="stat-card bg-white rounded-xl p-3.5 md:p-5 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow active:bg-gray-50">
-            <p class="text-xs md:text-sm text-gray-500">本月申請</p>
-            <p id="statTotal" class="text-xl md:text-2xl font-bold text-gray-800 mt-1">0</p>
-            <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mt-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+        <div id="statsCards" class="grid grid-cols-4 gap-2 md:gap-4">
+          <div onclick="filterByStatus('all')" class="stat-card bg-white rounded-xl px-3 py-2.5 md:p-5 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow active:bg-gray-50 text-center">
+            <p class="text-[10px] md:text-sm text-gray-500">本月申請</p>
+            <p id="statTotal" class="text-lg md:text-2xl font-bold text-gray-800 mt-0.5">0</p>
           </div>
-          <div onclick="filterByStatus('pending')" class="stat-card bg-white rounded-xl p-3.5 md:p-5 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow active:bg-gray-50">
-            <p class="text-xs md:text-sm text-gray-500">待審核</p>
-            <p id="statPending" class="text-xl md:text-2xl font-bold text-amber-600 mt-1">0</p>
-            <div class="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center mt-2"><svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <div onclick="filterByStatus('pending')" class="stat-card bg-white rounded-xl px-3 py-2.5 md:p-5 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow active:bg-gray-50 text-center">
+            <p class="text-[10px] md:text-sm text-gray-500">待審核</p>
+            <p id="statPending" class="text-lg md:text-2xl font-bold text-amber-600 mt-0.5">0</p>
           </div>
-          <div onclick="filterByStatus('approved')" class="stat-card bg-white rounded-xl p-3.5 md:p-5 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow active:bg-gray-50">
-            <p class="text-xs md:text-sm text-gray-500">已核准</p>
-            <p id="statApproved" class="text-xl md:text-2xl font-bold text-emerald-600 mt-1">0</p>
-            <div class="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center mt-2"><svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <div onclick="filterByStatus('approved')" class="stat-card bg-white rounded-xl px-3 py-2.5 md:p-5 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow active:bg-gray-50 text-center">
+            <p class="text-[10px] md:text-sm text-gray-500">已核准</p>
+            <p id="statApproved" class="text-lg md:text-2xl font-bold text-emerald-600 mt-0.5">0</p>
           </div>
-          <div onclick="filterByStatus('all')" class="stat-card bg-white rounded-xl p-3.5 md:p-5 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow active:bg-gray-50">
-            <p class="text-xs md:text-sm text-gray-500">報支金額</p>
-            <p id="statAmount" class="text-lg md:text-2xl font-bold text-gray-800 mt-1">$0</p>
-            <div class="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center mt-2"><svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <div onclick="filterByStatus('all')" class="stat-card bg-white rounded-xl px-3 py-2.5 md:p-5 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow active:bg-gray-50 text-center">
+            <p class="text-[10px] md:text-sm text-gray-500">報支金額</p>
+            <p id="statAmount" class="text-base md:text-2xl font-bold text-gray-800 mt-0.5">$0</p>
           </div>
         </div>
+
+        <!-- New Application Button (for applicant roles) -->
+        <button id="newAppBtn" onclick="navigateTo('newApplication')" class="hidden w-full bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white rounded-xl py-3 font-medium text-sm shadow-sm transition-colors flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          新增出差申請
+        </button>
 
         <!-- Record Cards (dynamic by role) -->
         <div>
@@ -230,11 +232,11 @@
               <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                 <div>
                   <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">出發日期 <span class="text-red-500">*</span></label>
-                  <input type="datetime-local" id="startDate" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" onchange="calcDays()" />
+                  <input type="date" id="startDate" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" onchange="calcDays()" />
                 </div>
                 <div>
                   <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">結束日期 <span class="text-red-500">*</span></label>
-                  <input type="datetime-local" id="endDate" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" onchange="calcDays()" />
+                  <input type="date" id="endDate" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" onchange="calcDays()" />
                 </div>
                 <div class="col-span-2 md:col-span-1">
                   <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">總計天數</label>
@@ -552,11 +554,6 @@
       </div>
 
     </main>
-
-    <!-- FAB: New Application (mobile only, for applicant roles) -->
-    <button id="fabNewApp" onclick="navigateTo('newApplication')" class="md:hidden fixed right-4 bottom-20 w-14 h-14 bg-primary-600 text-white rounded-full shadow-lg flex items-center justify-center z-30 active:bg-primary-700 hover:shadow-xl transition-all">
-      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-    </button>
 
     <!-- Bottom Tab Bar (mobile only) -->
     <nav id="bottomTabs" class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-20 safe-area-bottom">
