@@ -17,7 +17,7 @@
 .status-approved { background: #d1fae5; color: #065f46; }
 .status-rejected { background: #fee2e2; color: #991b1b; }
 .status-closed { background: #d1fae5; color: #065f46; }
-.status-voided { background: #e5e7eb; color: #6b7280; text-decoration: line-through; }
+.status-voided { background: #fee2e2; color: #991b1b; }
 
 /* Desktop Sidebar Navigation */
 .nav-item {

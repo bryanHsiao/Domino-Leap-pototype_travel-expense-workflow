@@ -15,6 +15,8 @@ const allRecords = [
   { id: 'BTO20260225-003', name: '王小明', dept: '資訊部', empId: 'A00012', title: '工程師', region: '國外', regionClass: 'purple', dest: '東京', startDate: '2026/03/05', endDate: '2026/03/08', days: 4, status: '出差中/待報支', statusClass: 'expense', amount: 0, reason: '技術研討會', contact: 'AWS Summit Tokyo', transport: '飛機', agent: '李小華', description: '參加 AWS Summit Tokyo 2026 技術研討會。', applyDate: '2026/02/25' },
   { id: 'BTO20260210-007', name: '王小明', dept: '資訊部', empId: 'A00012', title: '工程師', region: '國內', regionClass: 'blue', dest: '新竹', startDate: '2026/02/15', endDate: '2026/02/15', days: 1, status: '已結案', statusClass: 'closed', amount: 1200, reason: '供應商會議', contact: 'JKL 系統 - 周經理', transport: '大眾運輸', agent: '李小華', description: '前往新竹與 JKL 系統討論系統整合方案。', applyDate: '2026/02/10' },
   { id: 'BTO20260130-002', name: '王小明', dept: '資訊部', empId: 'A00012', title: '工程師', region: '國內', regionClass: 'blue', dest: '高雄', startDate: '2026/02/03', endDate: '2026/02/05', days: 3, status: '已結案', statusClass: 'closed', amount: 8500, reason: '系統部署', contact: '高雄分公司 - IT 部門', transport: '高鐵', agent: '李小華', description: '前往高雄分公司進行新系統部署及教育訓練。', applyDate: '2026/01/30' },
+  { id: 'BTO20260115-009', name: '王小明', dept: '資訊部', empId: 'A00012', title: '工程師', region: '國內', regionClass: 'blue', dest: '台南', startDate: '2026/01/20', endDate: '2026/01/21', days: 2, status: '已作廢', statusClass: 'voided', amount: 0, reason: '客戶拜訪', contact: 'MNO 科技 - 吳總', transport: '高鐵', agent: '李小華', description: '原訂前往台南拜訪 MNO 科技，因客戶臨時取消會議故作廢。', applyDate: '2026/01/15' },
+  { id: 'BTO20260306-004', name: '王小明', dept: '資訊部', empId: 'A00012', title: '工程師', region: '國內', regionClass: 'blue', dest: '桃園', startDate: '2026/03/20', endDate: '2026/03/20', days: 1, status: '草稿', statusClass: 'draft', amount: 0, reason: '工廠參訪', contact: 'PQR 製造 - 林廠長', transport: '自駕', agent: '李小華', description: '前往桃園 PQR 製造工廠進行產線系統需求評估。', applyDate: '2026/03/06' },
 ];
 
 const pendingReviews = [
@@ -201,20 +203,37 @@ function renderViewApplication(id) {
       <div><p class="text-sm font-medium text-amber-600">${label}</p><p class="text-xs text-gray-500 mt-0.5">${detail}</p></div>
     </div>`;
 
-  timeline += doneStep('申請提交', `${r.name} - ${r.applyDate}`);
-  if (r.statusClass === 'pending') {
-    timeline += waitStep('等待主管審核', '審核人：張部長');
+  if (r.statusClass === 'voided') {
+    timeline += doneStep('申請提交', `${r.name} - ${r.applyDate}`);
+    timeline += `<div class="flex gap-3">
+      <div class="flex flex-col items-center">
+        <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"><svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></div>
+      </div>
+      <div><p class="text-sm font-medium text-gray-500">已作廢</p><p class="text-xs text-gray-400 mt-0.5">申請人主動作廢</p></div>
+    </div>`;
+  } else if (r.statusClass === 'draft') {
+    timeline += `<div class="flex gap-3">
+      <div class="flex flex-col items-center">
+        <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div>
+      </div>
+      <div><p class="text-sm font-medium text-gray-500">草稿</p><p class="text-xs text-gray-400 mt-0.5">尚未送出</p></div>
+    </div>`;
   } else {
-    timeline += doneStep('主管已核准', '張部長 - ' + r.applyDate);
-    if (r.statusClass === 'expense') {
-      timeline += waitStep('出差中 / 待報支', `${r.startDate} ~ ${r.endDate}`);
-    } else if (r.statusClass === 'finance') {
-      timeline += doneStep('已報支', r.name);
-      timeline += waitStep('等待財務審核', '審核人：林會計');
-    } else if (r.statusClass === 'closed') {
-      timeline += doneStep('費用已報支', r.name);
-      timeline += doneStep('財務已核准', '林會計');
-      timeline += doneStep('已結案', '結案完成');
+    timeline += doneStep('申請提交', `${r.name} - ${r.applyDate}`);
+    if (r.statusClass === 'pending') {
+      timeline += waitStep('等待主管審核', '審核人：張部長');
+    } else {
+      timeline += doneStep('主管已核准', '張部長 - ' + r.applyDate);
+      if (r.statusClass === 'expense') {
+        timeline += waitStep('出差中 / 待報支', `${r.startDate} ~ ${r.endDate}`);
+      } else if (r.statusClass === 'finance') {
+        timeline += doneStep('已報支', r.name);
+        timeline += waitStep('等待財務審核', '審核人：林會計');
+      } else if (r.statusClass === 'closed') {
+        timeline += doneStep('費用已報支', r.name);
+        timeline += doneStep('財務已核准', '林會計');
+        timeline += doneStep('已結案', '結案完成');
+      }
     }
   }
 
@@ -400,7 +419,14 @@ function buildMiniTimeline(r) {
     { label: '結案', status: 'pending' },
   ];
 
-  if (r.statusClass === 'pending') {
+  if (r.statusClass === 'draft') {
+    steps[0].status = 'draft';
+  } else if (r.statusClass === 'voided') {
+    steps[0].status = 'voided';
+    steps[1].status = 'voided';
+    steps[2].status = 'voided';
+    steps[3].status = 'voided';
+  } else if (r.statusClass === 'pending') {
     steps[1].status = 'active';
   } else if (r.statusClass === 'expense') {
     steps[1].status = 'done';
@@ -420,8 +446,12 @@ function buildMiniTimeline(r) {
       ? '<div class="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></div>'
       : s.status === 'active'
         ? '<div class="w-5 h-5 bg-amber-400 rounded-full animate-pulse"></div>'
-        : '<div class="w-5 h-5 bg-gray-200 rounded-full"></div>';
-    const textColor = s.status === 'done' ? 'text-emerald-600' : s.status === 'active' ? 'text-amber-600 font-medium' : 'text-gray-300';
+        : s.status === 'voided'
+          ? '<div class="w-5 h-5 bg-red-400 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg></div>'
+          : s.status === 'draft'
+            ? '<div class="w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div>'
+            : '<div class="w-5 h-5 bg-gray-200 rounded-full"></div>';
+    const textColor = s.status === 'done' ? 'text-emerald-600' : s.status === 'active' ? 'text-amber-600 font-medium' : s.status === 'voided' ? 'text-red-400' : s.status === 'draft' ? 'text-gray-400' : 'text-gray-300';
     const line = i < steps.length - 1
       ? `<div class="h-0.5 w-8 ${s.status === 'done' ? 'bg-emerald-400' : 'bg-gray-200'}" style="margin-top:10px;flex-shrink:0"></div>`
       : '';
@@ -524,9 +554,10 @@ function filterMyApps(btn, filter) {
   const myName = roleConfig[currentRole]?.name;
   let records = allRecords.filter(r => r.name === myName);
 
-  if (filter === 'pending') records = records.filter(r => r.statusClass === 'pending' || r.statusClass === 'finance');
+  if (filter === 'draft') records = records.filter(r => r.statusClass === 'draft');
+  else if (filter === 'pending') records = records.filter(r => r.statusClass === 'pending' || r.statusClass === 'finance');
   else if (filter === 'expense') records = records.filter(r => r.statusClass === 'expense');
-  else if (filter === 'closed') records = records.filter(r => r.statusClass === 'closed' || r.statusClass === 'approved');
+  else if (filter === 'closed') records = records.filter(r => r.statusClass === 'closed' || r.statusClass === 'approved' || r.statusClass === 'voided');
 
   renderRecordCards('myAppCards', records, currentRole);
 }
@@ -599,6 +630,16 @@ function calcTotalExpense() {
 }
 
 // --- Submit Application ---
+function saveDraft() {
+  showToast('草稿已儲存', 'info');
+  setTimeout(() => {
+    navigateTo('myApplications');
+    // Auto-select draft filter
+    const draftBtn = document.querySelector('.filter-tab[onclick*="draft"]');
+    if (draftBtn) filterMyApps(draftBtn, 'draft');
+  }, 1000);
+}
+
 function submitApplication() {
   document.getElementById('confirmModal').classList.remove('hidden');
 }
