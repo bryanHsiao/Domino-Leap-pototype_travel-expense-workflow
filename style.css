@@ -251,19 +251,7 @@ input:focus, select:focus, textarea:focus {
 
 /* iOS Safari date input fix */
 input[type="date"] {
-  -webkit-appearance: none;
-  appearance: none;
   min-width: 0;
-}
-input[type="date"]::-webkit-date-and-time-value {
-  text-align: left;
-}
-@media (max-width: 767px) {
-  input[type="date"] {
-    font-size: 12px;
-    padding-left: 6px;
-    padding-right: 2px;
-  }
 }
 
 /* Mobile tooltip overflow prevention */
