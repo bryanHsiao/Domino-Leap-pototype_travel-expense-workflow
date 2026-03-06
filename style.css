@@ -249,6 +249,13 @@ input:focus, select:focus, textarea:focus {
   display: block !important;
 }
 
+/* Mobile tooltip overflow prevention */
+@media (max-width: 767px) {
+  .hint-dot .hint-tooltip {
+    max-width: calc(100vw - 48px);
+  }
+}
+
 /* Dynamic viewport height fix */
 .h-\[100dvh\] {
   height: 100dvh;
