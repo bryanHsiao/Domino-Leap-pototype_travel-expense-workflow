@@ -44,6 +44,10 @@
           <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200"><svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
           <div class="text-left"><div class="font-semibold text-gray-800">財務審核人員</div><div class="text-sm text-gray-500">費用審核與核銷</div></div>
         </button>
+        <button onclick="selectRole('admin')" class="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-all group">
+          <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200"><svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+          <div class="text-left"><div class="font-semibold text-gray-800">管理人員</div><div class="text-sm text-gray-500">數據維護、報表分析與導出</div></div>
+        </button>
       </div>
     </div>
   </div>
@@ -68,11 +72,11 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
           儀表板
         </button>
-        <button onclick="navigateTo('newApplication')" data-nav="newApplication" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all" data-role="employee">
+        <button onclick="navigateTo('newApplication')" data-nav="newApplication" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all" data-role="applicant">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           新增出差申請
         </button>
-        <button onclick="navigateTo('myApplications')" data-nav="myApplications" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all" data-role="employee">
+        <button onclick="navigateTo('myApplications')" data-nav="myApplications" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all" data-role="my-apps">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           我的申請
         </button>
@@ -81,7 +85,7 @@
           待審核
           <span id="pendingBadge" class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">3</span>
         </button>
-        <button onclick="navigateTo('allRecords')" data-nav="allRecords" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all">
+        <button onclick="navigateTo('allRecords')" data-nav="allRecords" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all" data-role="all-records">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
           全部紀錄
         </button>
@@ -170,11 +174,11 @@
           </div>
         </div>
 
-        <!-- Recent Applications -->
+        <!-- Recent Applications (dynamic by role) -->
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm">
           <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <h3 class="font-semibold text-gray-800">最近申請紀錄</h3>
-            <button onclick="navigateTo('allRecords')" class="text-sm text-primary-600 hover:text-primary-700 font-medium">查看全部</button>
+            <h3 id="dashboardTableTitle" class="font-semibold text-gray-800">我的申請紀錄</h3>
+            <button id="dashboardViewAll" onclick="navigateTo('myApplications')" class="text-sm text-primary-600 hover:text-primary-700 font-medium">查看全部</button>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
@@ -189,43 +193,7 @@
                   <th class="text-left px-6 py-3 text-gray-500 font-medium">金額</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-100">
-                <tr class="hover:bg-gray-50 cursor-pointer" onclick="navigateTo('viewApplication', 'BTO20260301-001')">
-                  <td class="px-6 py-3 text-primary-600 font-medium">BTO20260301-001</td>
-                  <td class="px-6 py-3">王小明</td>
-                  <td class="px-6 py-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">國內</span></td>
-                  <td class="px-6 py-3">台中</td>
-                  <td class="px-6 py-3">2026/03/10</td>
-                  <td class="px-6 py-3"><span class="status-badge status-pending">主管審核中</span></td>
-                  <td class="px-6 py-3 font-medium">$3,500</td>
-                </tr>
-                <tr class="hover:bg-gray-50 cursor-pointer" onclick="navigateTo('viewApplication', 'BTO20260228-012')">
-                  <td class="px-6 py-3 text-primary-600 font-medium">BTO20260228-012</td>
-                  <td class="px-6 py-3">李小華</td>
-                  <td class="px-6 py-3"><span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs">國外</span></td>
-                  <td class="px-6 py-3">東京</td>
-                  <td class="px-6 py-3">2026/03/15</td>
-                  <td class="px-6 py-3"><span class="status-badge status-expense">出差中/待報支</span></td>
-                  <td class="px-6 py-3 font-medium">$45,200</td>
-                </tr>
-                <tr class="hover:bg-gray-50 cursor-pointer" onclick="navigateTo('viewApplication', 'BTO20260225-008')">
-                  <td class="px-6 py-3 text-primary-600 font-medium">BTO20260225-008</td>
-                  <td class="px-6 py-3">張大方</td>
-                  <td class="px-6 py-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">國內</span></td>
-                  <td class="px-6 py-3">高雄</td>
-                  <td class="px-6 py-3">2026/03/01</td>
-                  <td class="px-6 py-3"><span class="status-badge status-closed">已結案</span></td>
-                  <td class="px-6 py-3 font-medium">$12,800</td>
-                </tr>
-                <tr class="hover:bg-gray-50 cursor-pointer">
-                  <td class="px-6 py-3 text-primary-600 font-medium">BTO20260220-005</td>
-                  <td class="px-6 py-3">陳美玲</td>
-                  <td class="px-6 py-3"><span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs">國外</span></td>
-                  <td class="px-6 py-3">上海</td>
-                  <td class="px-6 py-3">2026/02/25</td>
-                  <td class="px-6 py-3"><span class="status-badge status-finance">財務審核中</span></td>
-                  <td class="px-6 py-3 font-medium">$38,000</td>
-                </tr>
+              <tbody id="dashboardTableBody" class="divide-y divide-gray-100">
               </tbody>
             </table>
           </div>
