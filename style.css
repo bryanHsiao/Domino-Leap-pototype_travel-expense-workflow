@@ -259,6 +259,17 @@ input[type="date"] {
   .hint-dot .hint-tooltip {
     max-width: calc(100vw - 48px);
   }
+  /* Field-level hints: align left to prevent left overflow */
+  .hint-field .hint-tooltip {
+    left: -8px !important;
+    right: auto !important;
+    transform: none !important;
+  }
+  .hint-field .hint-tooltip::after {
+    left: 12px !important;
+    right: auto !important;
+    transform: none !important;
+  }
 }
 
 /* Dynamic viewport height fix */
