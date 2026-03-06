@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Leap 出差及報支系統</title>
+  <title>出差及報支系統</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -28,7 +28,7 @@
         <div class="w-14 h-14 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
           <svg class="w-7 h-7 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
         </div>
-        <h2 class="text-xl font-bold text-gray-800">Leap 出差及報支系統</h2>
+        <h2 class="text-xl font-bold text-gray-800">出差及報支系統</h2>
         <p class="text-gray-500 text-sm mt-1">請選擇角色以進入系統</p>
       </div>
       <div class="space-y-2.5">
@@ -59,10 +59,12 @@
     <aside id="sidebar" class="hidden md:flex w-64 bg-sidebar text-white flex-shrink-0 flex-col fixed inset-y-0 left-0 z-30">
       <div class="p-5 border-b border-white/10">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 bg-primary-500 rounded-lg flex items-center justify-center font-bold text-sm">DL</div>
+          <div class="w-9 h-9 bg-primary-500 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          </div>
           <div>
-            <h1 class="font-bold text-base">Domino Leap</h1>
-            <p class="text-xs text-indigo-300">出差及報支系統</p>
+            <h1 class="font-bold text-base">出差報支</h1>
+            <p class="text-xs text-indigo-300">Travel & Expense</p>
           </div>
         </div>
       </div>
@@ -108,23 +110,40 @@
     </aside>
 
     <!-- Top Bar (mobile: compact header) -->
-    <header class="bg-white border-b border-gray-200 px-4 py-3 md:px-6 md:py-4 flex items-center justify-between sticky top-0 z-20 md:ml-64">
-      <div class="flex items-center gap-3">
-        <div id="userAvatar" class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-xs font-semibold md:hidden">王</div>
+    <header class="bg-white border-b border-gray-200 px-4 py-3 md:py-0 md:px-6 md:h-[81px] flex items-center justify-between sticky top-0 z-20 md:ml-64">
+      <!-- Mobile: avatar + page title -->
+      <div class="flex items-center gap-3 md:hidden">
+        <div id="userAvatar" class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">王</div>
         <div>
-          <h2 id="pageTitle" class="text-base md:text-lg font-bold text-gray-800">儀表板</h2>
-          <p id="userName" class="text-xs text-gray-500 md:hidden">王小明</p>
+          <h2 id="pageTitleMobile" class="text-base font-bold text-gray-800">儀表板</h2>
+          <p id="userName" class="text-xs text-gray-500">王小明</p>
         </div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 md:hidden">
         <button class="relative text-gray-500 hover:text-gray-700">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
           <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
         </button>
-        <button onclick="logout()" class="text-gray-400 hover:text-gray-600 md:hidden" title="登出">
+        <button onclick="logout()" class="text-gray-400 hover:text-gray-600" title="登出">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
         </button>
-        <div class="hidden md:block text-sm text-gray-500" id="currentDate">2026/03/06</div>
+      </div>
+      <!-- Desktop: page title + search + notifications -->
+      <div class="hidden md:flex md:items-center md:justify-between md:w-full">
+        <div class="flex items-center gap-4">
+          <h2 id="pageTitle" class="text-lg font-bold text-gray-800">儀表板</h2>
+          <span class="text-sm text-gray-400" id="currentDate">2026/03/07</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" placeholder="搜尋申請單號、地點..." class="pl-9 pr-4 py-1.5 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:bg-white w-56 transition-colors" />
+          </div>
+          <button class="relative text-gray-400 hover:text-gray-600 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -251,38 +270,38 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">出差區域 <span class="text-red-500">*</span></label>
-                  <select class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm">
+                  <select id="formRegion" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm">
                     <option value="">請選擇</option><option value="domestic">國內</option><option value="overseas">國外</option>
                   </select>
                 </div>
                 <div>
                   <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">出差地點 <span class="text-red-500">*</span></label>
-                  <input type="text" placeholder="請輸入出差地點" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
+                  <input type="text" id="formDest" placeholder="請輸入出差地點" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
                 </div>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">出差原因 <span class="text-red-500">*</span></label>
-                  <input type="text" placeholder="請輸入出差原因" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
+                  <input type="text" id="formReason" placeholder="請輸入出差原因" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
                 </div>
                 <div>
                   <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">拜訪對象 <span class="text-red-500">*</span></label>
-                  <input type="text" placeholder="請輸入拜訪對象" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
+                  <input type="text" id="formContact" placeholder="請輸入拜訪對象" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
                 </div>
               </div>
               <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">往返交通工具 <span class="text-red-500">*</span></label>
-                <select class="w-full md:w-1/2 px-3 py-2.5 border border-gray-300 rounded-lg text-sm">
-                  <option value="">請選擇</option><option>公務車</option><option>大眾運輸</option><option>私家車</option><option>飛機</option>
+                <select id="formTransport" class="w-full md:w-1/2 px-3 py-2.5 border border-gray-300 rounded-lg text-sm">
+                  <option value="">請選擇</option><option>公務車</option><option>大眾運輸</option><option>私家車</option><option>飛機</option><option>自駕</option><option>高鐵</option>
                 </select>
               </div>
               <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">代理人</label>
-                <input type="text" placeholder="搜尋員工姓名或工號..." class="w-full md:w-1/2 px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
+                <input type="text" id="formAgent" placeholder="搜尋員工姓名或工號..." class="w-full md:w-1/2 px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
               </div>
               <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">出差說明</label>
-                <textarea rows="3" placeholder="請輸入出差相關說明（選填）" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm resize-none"></textarea>
+                <textarea id="formDescription" rows="3" placeholder="請輸入出差相關說明（選填）" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm resize-none"></textarea>
               </div>
             </div>
           </div>

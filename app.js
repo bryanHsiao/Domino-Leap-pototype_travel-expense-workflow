@@ -146,7 +146,10 @@ function navigateTo(page, id) {
     target.style.animation = '';
   }
 
-  document.getElementById('pageTitle').textContent = pageTitles[page] || page;
+  const title = pageTitles[page] || page;
+  document.getElementById('pageTitle').textContent = title;
+  const mobileTitleEl = document.getElementById('pageTitleMobile');
+  if (mobileTitleEl) mobileTitleEl.textContent = title;
 
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.classList.remove('active');
@@ -474,9 +477,11 @@ function renderRecordCards(containerId, records, role) {
   }
 
   container.innerHTML = records.map(r => {
-    const clickTarget = (role === 'manager' || role === 'finance') && (r.statusClass === 'pending' || r.statusClass === 'finance')
-      ? `navigateTo('reviewApplication', '${r.id}')`
-      : `navigateTo('viewApplication', '${r.id}')`;
+    const clickTarget = r.statusClass === 'draft'
+      ? `editDraft('${r.id}')`
+      : (role === 'manager' || role === 'finance') && (r.statusClass === 'pending' || r.statusClass === 'finance')
+        ? `navigateTo('reviewApplication', '${r.id}')`
+        : `navigateTo('viewApplication', '${r.id}')`;
     const amountStr = r.amount ? '$' + (typeof r.amount === 'number' ? r.amount.toLocaleString() : r.amount.replace('$','')) : '-';
 
     return `
@@ -630,6 +635,40 @@ function calcTotalExpense() {
 }
 
 // --- Submit Application ---
+function editDraft(id) {
+  const r = allRecords.find(rec => rec.id === id);
+  if (!r) return;
+  navigateTo('newApplication');
+  // Pre-fill form fields with draft data
+  setTimeout(() => {
+    const startDate = document.getElementById('startDate');
+    const endDate = document.getElementById('endDate');
+    if (startDate) startDate.value = r.startDate.replace(/\//g, '-');
+    if (endDate) endDate.value = r.endDate.replace(/\//g, '-');
+    calcDays();
+    const region = document.getElementById('formRegion');
+    if (region) region.value = r.region === '國內' ? 'domestic' : 'overseas';
+    const dest = document.getElementById('formDest');
+    if (dest) dest.value = r.dest || '';
+    const reason = document.getElementById('formReason');
+    if (reason) reason.value = r.reason || '';
+    const contact = document.getElementById('formContact');
+    if (contact) contact.value = r.contact || '';
+    const transport = document.getElementById('formTransport');
+    if (transport) {
+      // Match by option text
+      const opts = transport.options;
+      for (let i = 0; i < opts.length; i++) {
+        if (opts[i].text === r.transport) { transport.selectedIndex = i; break; }
+      }
+    }
+    const agent = document.getElementById('formAgent');
+    if (agent) agent.value = r.agent || '';
+    const desc = document.getElementById('formDescription');
+    if (desc) desc.value = r.description || '';
+  }, 50);
+}
+
 function saveDraft() {
   showToast('草稿已儲存', 'info');
   setTimeout(() => {
