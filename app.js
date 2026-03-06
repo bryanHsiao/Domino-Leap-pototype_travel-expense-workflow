@@ -1,9 +1,34 @@
 // ============================================================
-// Leap 出差及報支系統 - UI Prototype JavaScript
+// Leap 出差及報支系統 - Mobile-First UI Prototype
 // ============================================================
 
 let currentRole = '';
 let currentPage = 'dashboard';
+
+// --- Demo Data ---
+const allRecords = [
+  { id: 'BTO20260301-001', name: '王小明', dept: '資訊部', region: '國內', regionClass: 'blue', dest: '台中', startDate: '2026/03/10', endDate: '2026/03/12', days: 3, status: '主管審核中', statusClass: 'pending', amount: 3500 },
+  { id: 'BTO20260228-012', name: '李小華', dept: '業務部', region: '國外', regionClass: 'purple', dest: '東京', startDate: '2026/03/15', endDate: '2026/03/19', days: 5, status: '出差中/待報支', statusClass: 'expense', amount: 45200 },
+  { id: 'BTO20260225-008', name: '張大方', dept: '業務部', region: '國內', regionClass: 'blue', dest: '高雄', startDate: '2026/03/01', endDate: '2026/03/03', days: 3, status: '已結案', statusClass: 'closed', amount: 12800 },
+  { id: 'BTO20260220-005', name: '陳美玲', dept: '業務部', region: '國外', regionClass: 'purple', dest: '上海', startDate: '2026/02/25', endDate: '2026/02/28', days: 4, status: '財務審核中', statusClass: 'finance', amount: 38000 },
+  { id: 'BTO20260305-002', name: '林志偉', dept: '研發部', region: '國內', regionClass: 'blue', dest: '新竹', startDate: '2026/03/08', endDate: '2026/03/08', days: 1, status: '主管審核中', statusClass: 'pending', amount: 0 },
+  { id: 'BTO20260225-003', name: '王小明', dept: '資訊部', region: '國外', regionClass: 'purple', dest: '東京', startDate: '2026/03/05', endDate: '2026/03/08', days: 4, status: '出差中/待報支', statusClass: 'expense', amount: 0 },
+  { id: 'BTO20260210-007', name: '王小明', dept: '資訊部', region: '國內', regionClass: 'blue', dest: '新竹', startDate: '2026/02/15', endDate: '2026/02/15', days: 1, status: '已結案', statusClass: 'closed', amount: 1200 },
+  { id: 'BTO20260130-002', name: '王小明', dept: '資訊部', region: '國內', regionClass: 'blue', dest: '高雄', startDate: '2026/02/03', endDate: '2026/02/05', days: 3, status: '已結案', statusClass: 'closed', amount: 8500 },
+];
+
+const pendingReviews = [
+  { id: 'BTO20260301-001', name: '王小明', dept: '資訊部', region: '國內', regionClass: 'blue', dest: '台中', date: '03/10 ~ 03/12', status: '待行程審核', statusClass: 'pending' },
+  { id: 'BTO20260228-015', name: '陳美玲', dept: '業務部', region: '國外', regionClass: 'purple', dest: '上海', date: '02/25 ~ 02/28', status: '待費用審核', statusClass: 'finance', amount: '$38,000' },
+  { id: 'BTO20260305-002', name: '林志偉', dept: '研發部', region: '國內', regionClass: 'blue', dest: '新竹', date: '03/08', status: '待行程審核', statusClass: 'pending' },
+];
+
+const roleConfig = {
+  employee: { name: '王小明', title: '資訊部 / 工程師', avatar: '王' },
+  manager:  { name: '張部長', title: '資訊部 / 部長',   avatar: '張' },
+  finance:  { name: '林會計', title: '財務部 / 會計',   avatar: '林' },
+  admin:    { name: '周管理', title: '管理部 / 管理師', avatar: '周' },
+};
 
 // --- Role Selection ---
 function selectRole(role) {
@@ -11,42 +36,47 @@ function selectRole(role) {
   document.getElementById('roleModal').classList.add('hidden');
   document.getElementById('appShell').classList.remove('hidden');
 
-  const roleConfig = {
-    employee: { name: '王小明', title: '資訊部 / 工程師', avatar: '王' },
-    manager:  { name: '張部長', title: '資訊部 / 部長',   avatar: '張' },
-    finance:  { name: '林會計', title: '財務部 / 會計',   avatar: '林' },
-    admin:    { name: '周管理', title: '管理部 / 管理師', avatar: '周' },
-  };
-
   const info = roleConfig[role];
   document.getElementById('userName').textContent = info.name;
-  document.getElementById('userRole').textContent = info.title;
   document.getElementById('userAvatar').textContent = info.avatar;
+  // Desktop sidebar user info
+  const dName = document.getElementById('userNameDesktop');
+  const dRole = document.getElementById('userRoleDesktop');
+  const dAvatar = document.getElementById('userAvatarDesktop');
+  if (dName) dName.textContent = info.name;
+  if (dRole) dRole.textContent = info.title;
+  if (dAvatar) dAvatar.textContent = info.avatar;
 
-  // Show/hide nav items based on role
-  // 新增出差申請：員工、主管可用
+  // Update form applicant name
+  const formApp = document.getElementById('formApplicant');
+  if (formApp) formApp.value = info.name;
+
+  // Show/hide desktop sidebar nav items based on role
   document.querySelectorAll('[data-role="applicant"]').forEach(el => {
     el.style.display = (role === 'employee' || role === 'manager') ? '' : 'none';
   });
-  // 我的申請：員工、主管可看自己的
   document.querySelectorAll('[data-role="my-apps"]').forEach(el => {
     el.style.display = (role === 'employee' || role === 'manager') ? '' : 'none';
   });
-  // 待審核：主管、財務可用
   document.querySelectorAll('[data-role="approver"]').forEach(el => {
     el.style.display = (role === 'manager' || role === 'finance') ? '' : 'none';
   });
-  // 全部紀錄：財務、管理員可用
   document.querySelectorAll('[data-role="all-records"]').forEach(el => {
     el.style.display = (role === 'finance' || role === 'admin') ? '' : 'none';
   });
-  // HR 人員管理：管理員專用
   document.querySelectorAll('[data-role="admin"]').forEach(el => {
     el.style.display = role === 'admin' ? '' : 'none';
   });
 
-  // Update dashboard table based on role
-  updateDashboardTable(role);
+  // FAB visibility (only for applicant roles)
+  const fab = document.getElementById('fabNewApp');
+  if (fab) fab.style.display = (role === 'employee' || role === 'manager') ? '' : 'none';
+
+  // Build bottom tabs
+  buildBottomTabs(role);
+
+  // Update dashboard
+  updateDashboard(role);
 
   navigateTo('dashboard');
 }
@@ -57,49 +87,211 @@ function logout() {
   currentRole = '';
 }
 
+// --- Bottom Tab Bar ---
+function buildBottomTabs(role) {
+  const container = document.getElementById('tabButtons');
+  let tabs = [];
+
+  tabs.push({ page: 'dashboard', label: '首頁', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>' });
+
+  if (role === 'employee' || role === 'manager') {
+    tabs.push({ page: 'myApplications', label: '我的申請', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>' });
+  }
+
+  if (role === 'manager' || role === 'finance') {
+    tabs.push({ page: 'pendingApprovals', label: '待審核', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>', badge: '3' });
+  }
+
+  if (role === 'finance' || role === 'admin') {
+    tabs.push({ page: 'allRecords', label: '全部紀錄', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>' });
+  }
+
+  if (role === 'admin') {
+    tabs.push({ page: 'hrManagement', label: 'HR管理', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>' });
+  }
+
+  container.innerHTML = tabs.map(t => `
+    <button onclick="navigateTo('${t.page}')" data-tab="${t.page}" class="tab-btn">
+      ${t.icon}
+      <span>${t.label}</span>
+      ${t.badge ? `<span class="tab-badge">${t.badge}</span>` : ''}
+    </button>
+  `).join('');
+}
+
 // --- Navigation ---
 const pageTitles = {
-  dashboard: '儀表板',
+  dashboard: '首頁',
   newApplication: '新增出差申請',
   myApplications: '我的申請',
   pendingApprovals: '待審核',
   allRecords: '全部紀錄',
-  viewApplication: '申請單詳情',
-  reviewApplication: '審核申請單',
+  viewApplication: '申請詳情',
+  reviewApplication: '審核申請',
   hrManagement: 'HR 人員管理',
 };
 
 function navigateTo(page, id) {
   currentPage = page;
 
-  // Hide all pages
-  document.querySelectorAll('.page').forEach(p => {
-    p.classList.add('hidden');
-  });
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
 
-  // Show target page
   const target = document.getElementById('page-' + page);
   if (target) {
     target.classList.remove('hidden');
-    // Re-trigger animation
     target.style.animation = 'none';
-    target.offsetHeight; // trigger reflow
+    target.offsetHeight;
     target.style.animation = '';
   }
 
-  // Update page title
   document.getElementById('pageTitle').textContent = pageTitles[page] || page;
 
-  // Update active nav
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.classList.remove('active');
-    if (btn.dataset.nav === page) {
-      btn.classList.add('active');
-    }
+    if (btn.dataset.nav === page) btn.classList.add('active');
   });
 
-  // Scroll to top
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.tab === page) btn.classList.add('active');
+  });
+
+  const fab = document.getElementById('fabNewApp');
+  if (fab) {
+    fab.style.display = (page === 'newApplication' || !(currentRole === 'employee' || currentRole === 'manager')) ? 'none' : '';
+  }
+
   document.querySelector('main').scrollTop = 0;
+}
+
+// --- Dashboard ---
+function updateDashboard(role) {
+  const myName = roleConfig[role]?.name;
+  let records;
+
+  if (role === 'employee') {
+    records = allRecords.filter(r => r.name === myName);
+  } else if (role === 'manager') {
+    records = allRecords.filter(r => r.name === myName || r.statusClass === 'pending');
+  } else {
+    records = allRecords;
+  }
+
+  const total = records.length;
+  const pending = records.filter(r => r.statusClass === 'pending' || r.statusClass === 'finance').length;
+  const approved = records.filter(r => r.statusClass === 'closed' || r.statusClass === 'approved').length;
+  const totalAmount = records.reduce((sum, r) => sum + (r.amount || 0), 0);
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statApproved').textContent = approved;
+  document.getElementById('statAmount').textContent = '$' + totalAmount.toLocaleString();
+
+  const titleEl = document.getElementById('dashboardCardTitle');
+  const viewAllBtn = document.getElementById('dashboardViewAll');
+
+  if (role === 'employee') {
+    titleEl.textContent = '我的申請紀錄';
+    viewAllBtn.textContent = '查看全部';
+    viewAllBtn.onclick = () => navigateTo('myApplications');
+  } else if (role === 'manager') {
+    titleEl.textContent = '待審核案件';
+    viewAllBtn.textContent = '查看全部';
+    viewAllBtn.onclick = () => navigateTo('pendingApprovals');
+    records = pendingReviews;
+  } else if (role === 'finance') {
+    titleEl.textContent = '待審核案件';
+    viewAllBtn.textContent = '查看全部';
+    viewAllBtn.onclick = () => navigateTo('pendingApprovals');
+    records = pendingReviews.filter(r => r.statusClass === 'finance');
+  } else {
+    titleEl.textContent = '全部申請紀錄';
+    viewAllBtn.textContent = '查看全部';
+    viewAllBtn.onclick = () => navigateTo('allRecords');
+  }
+
+  renderRecordCards('dashboardCards', records, role);
+  renderMyAppsCards();
+  renderPendingCards();
+  renderAllRecordCards();
+}
+
+// --- Card Rendering ---
+function renderRecordCards(containerId, records, role) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (records.length === 0) {
+    container.innerHTML = '<div class="text-center text-gray-400 text-sm py-8">目前沒有紀錄</div>';
+    return;
+  }
+
+  container.innerHTML = records.map(r => {
+    const clickTarget = (role === 'manager' || role === 'finance') && (r.statusClass === 'pending' || r.statusClass === 'finance')
+      ? `navigateTo('reviewApplication', '${r.id}')`
+      : `navigateTo('viewApplication', '${r.id}')`;
+    const amountStr = r.amount ? '$' + (typeof r.amount === 'number' ? r.amount.toLocaleString() : r.amount.replace('$','')) : '-';
+
+    return `
+      <div class="record-card" onclick="${clickTarget}">
+        <div class="flex items-start justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold text-primary-600">${r.id.slice(-7)}</span>
+            <span class="px-1.5 py-0.5 bg-${r.regionClass}-100 text-${r.regionClass}-700 rounded text-[10px]">${r.region}</span>
+          </div>
+          <span class="status-badge status-${r.statusClass}">${r.status}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="text-sm text-gray-800">
+            <span class="font-medium">${r.dest}</span>
+            <span class="text-gray-400 text-xs ml-2">${r.date || r.startDate}</span>
+          </div>
+          <span class="text-sm font-bold text-gray-700">${amountStr}</span>
+        </div>
+        ${r.name && role !== 'employee' ? `<p class="text-xs text-gray-400 mt-1">${r.name} - ${r.dept || ''}</p>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderMyAppsCards() {
+  const myName = roleConfig[currentRole]?.name;
+  const records = allRecords.filter(r => r.name === myName);
+  renderRecordCards('myAppCards', records, currentRole);
+}
+
+function renderPendingCards() {
+  renderRecordCards('pendingCards', pendingReviews, currentRole);
+}
+
+function renderAllRecordCards() {
+  renderRecordCards('allRecordCards', allRecords, 'admin');
+}
+
+function filterByStatus(type) {
+  if (currentRole === 'employee' || currentRole === 'manager') {
+    navigateTo('myApplications');
+  } else {
+    navigateTo('allRecords');
+  }
+}
+
+function filterMyApps(btn, filter) {
+  document.querySelectorAll('.filter-tab').forEach(t => {
+    t.classList.remove('bg-primary-600', 'text-white');
+    t.classList.add('bg-gray-100', 'text-gray-500');
+  });
+  btn.classList.remove('bg-gray-100', 'text-gray-500');
+  btn.classList.add('bg-primary-600', 'text-white');
+
+  const myName = roleConfig[currentRole]?.name;
+  let records = allRecords.filter(r => r.name === myName);
+
+  if (filter === 'pending') records = records.filter(r => r.statusClass === 'pending' || r.statusClass === 'finance');
+  else if (filter === 'expense') records = records.filter(r => r.statusClass === 'expense');
+  else if (filter === 'closed') records = records.filter(r => r.statusClass === 'closed' || r.statusClass === 'approved');
+
+  renderRecordCards('myAppCards', records, currentRole);
 }
 
 // --- Date Calculation ---
@@ -114,82 +306,56 @@ function calcDays() {
   }
 }
 
-// --- Dynamic Table: Companions ---
-function addCompanionRow() {
-  const tbody = document.getElementById('companionsTable');
-  const row = document.createElement('tr');
-  row.innerHTML = `
-    <td class="px-4 py-2"><input type="text" placeholder="A00001" class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-primary-200" /></td>
-    <td class="px-4 py-2"><input type="text" placeholder="姓名" class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-primary-200" /></td>
-    <td class="px-4 py-2"><input type="text" placeholder="部門" class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:ring-1 focus:ring-primary-200" /></td>
-    <td class="px-4 py-2 text-center"><button onclick="removeRow(this)" class="text-red-400 hover:text-red-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></td>
-  `;
-  tbody.appendChild(row);
-}
-
-function removeRow(btn) {
-  const row = btn.closest('tr');
-  const tbody = row.parentElement;
-  if (tbody.children.length > 1) {
-    row.remove();
-  }
-  calcTotalExpense();
-}
-
 // --- Expense Section ---
 function toggleExpenseSection(show) {
   const section = document.getElementById('expenseSection');
-  if (show) {
-    section.classList.remove('hidden');
-  } else {
-    section.classList.add('hidden');
-  }
+  if (show) section.classList.remove('hidden');
+  else section.classList.add('hidden');
 }
 
-function addExpenseRow() {
-  const tbody = document.getElementById('expenseTable');
-  const row = document.createElement('tr');
-  row.innerHTML = `
-    <td class="px-3 py-2">
-      <select class="w-full px-2 py-1 border border-gray-200 rounded text-sm">
-        <option value="">選擇</option>
-        <option>膳雜費</option>
-        <option>住宿費</option>
-        <option>交通費</option>
-        <option>其他</option>
+function addExpenseCard() {
+  const container = document.getElementById('expenseItems');
+  const card = document.createElement('div');
+  card.className = 'expense-card border border-gray-200 rounded-lg p-3 space-y-2';
+  card.innerHTML = `
+    <div class="flex items-center justify-between">
+      <select class="px-2 py-1.5 border border-gray-200 rounded text-sm flex-1 mr-2">
+        <option value="">費用類別</option><option>膳雜費</option><option>住宿費</option><option>交通費</option><option>其他</option>
       </select>
-    </td>
-    <td class="px-3 py-2">
-      <select class="w-full px-2 py-1 border border-gray-200 rounded text-sm">
-        <option>TWD</option>
-        <option>USD</option>
-        <option>JPY</option>
-        <option>CNY</option>
-        <option>EUR</option>
+      <select class="px-2 py-1.5 border border-gray-200 rounded text-sm w-20">
+        <option>TWD</option><option>USD</option><option>JPY</option><option>CNY</option><option>EUR</option>
       </select>
-    </td>
-    <td class="px-3 py-2"><input type="number" placeholder="0" class="expense-price w-full px-2 py-1 border border-gray-200 rounded text-sm text-right" oninput="calcExpenseRow(this)" /></td>
-    <td class="px-3 py-2"><input type="number" placeholder="0" class="expense-qty w-full px-2 py-1 border border-gray-200 rounded text-sm text-right" oninput="calcExpenseRow(this)" /></td>
-    <td class="px-3 py-2"><input type="text" readonly class="expense-subtotal w-full px-2 py-1 bg-gray-100 border border-gray-200 rounded text-sm text-right" value="$0" /></td>
-    <td class="px-3 py-2 text-center"><button onclick="removeRow(this)" class="text-red-400 hover:text-red-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></td>
+      <button onclick="removeExpenseCard(this)" class="text-red-400 hover:text-red-600 ml-2 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="grid grid-cols-3 gap-2">
+      <div><label class="text-[10px] text-gray-400">單價</label><input type="number" placeholder="0" class="expense-price w-full px-2 py-1.5 border border-gray-200 rounded text-sm text-right" oninput="calcExpenseCard(this)" /></div>
+      <div><label class="text-[10px] text-gray-400">數量</label><input type="number" placeholder="0" class="expense-qty w-full px-2 py-1.5 border border-gray-200 rounded text-sm text-right" oninput="calcExpenseCard(this)" /></div>
+      <div><label class="text-[10px] text-gray-400">小計</label><input type="text" readonly class="expense-subtotal w-full px-2 py-1.5 bg-gray-100 border border-gray-200 rounded text-sm text-right" value="$0" /></div>
+    </div>
   `;
-  tbody.appendChild(row);
+  container.appendChild(card);
 }
 
-function calcExpenseRow(input) {
-  const row = input.closest('tr');
-  const price = parseFloat(row.querySelector('.expense-price').value) || 0;
-  const qty = parseFloat(row.querySelector('.expense-qty').value) || 0;
-  const subtotal = price * qty;
-  row.querySelector('.expense-subtotal').value = '$' + subtotal.toLocaleString();
+function removeExpenseCard(btn) {
+  const card = btn.closest('.expense-card');
+  const container = card.parentElement;
+  if (container.children.length > 1) card.remove();
+  calcTotalExpense();
+}
+
+function calcExpenseCard(input) {
+  const card = input.closest('.expense-card');
+  const price = parseFloat(card.querySelector('.expense-price').value) || 0;
+  const qty = parseFloat(card.querySelector('.expense-qty').value) || 0;
+  card.querySelector('.expense-subtotal').value = '$' + (price * qty).toLocaleString();
   calcTotalExpense();
 }
 
 function calcTotalExpense() {
   let total = 0;
-  document.querySelectorAll('#expenseTable tr').forEach(row => {
-    const price = parseFloat(row.querySelector('.expense-price')?.value) || 0;
-    const qty = parseFloat(row.querySelector('.expense-qty')?.value) || 0;
+  document.querySelectorAll('#expenseItems .expense-card').forEach(card => {
+    const price = parseFloat(card.querySelector('.expense-price')?.value) || 0;
+    const qty = parseFloat(card.querySelector('.expense-qty')?.value) || 0;
     total += price * qty;
   });
   document.getElementById('totalExpense').textContent = '$' + total.toLocaleString();
@@ -207,12 +373,10 @@ function closeModal() {
 function confirmSubmit() {
   closeModal();
   showToast('出差申請已提交，通知已發送給主管', 'success');
-  setTimeout(() => {
-    navigateTo('myApplications');
-  }, 1500);
+  setTimeout(() => navigateTo('myApplications'), 1500);
 }
 
-// --- Toast Notification ---
+// --- Toast ---
 function showToast(message, type = 'info') {
   const toast = document.getElementById('toast');
   const content = document.getElementById('toastContent');
@@ -220,9 +384,7 @@ function showToast(message, type = 'info') {
   const iconEl = document.getElementById('toastIcon');
 
   messageEl.textContent = message;
-
-  // Reset classes
-  content.className = 'flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg border text-sm font-medium';
+  content.className = 'flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium';
 
   const icons = {
     success: '<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
@@ -230,7 +392,6 @@ function showToast(message, type = 'info') {
     info: '<svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
     error: '<svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
   };
-
   const styles = {
     success: 'bg-emerald-50 border-emerald-200 text-emerald-800',
     warning: 'bg-amber-50 border-amber-200 text-amber-800',
@@ -251,64 +412,12 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
-// --- Dashboard Dynamic Table ---
-function updateDashboardTable(role) {
-  const tbody = document.getElementById('dashboardTableBody');
-  const title = document.getElementById('dashboardTableTitle');
-  const viewAllBtn = document.getElementById('dashboardViewAll');
-
-  const allRecords = [
-    { id: 'BTO20260301-001', name: '王小明', region: '國內', regionClass: 'blue', dest: '台中', date: '2026/03/10', status: '主管審核中', statusClass: 'pending', amount: '$3,500' },
-    { id: 'BTO20260228-012', name: '李小華', region: '國外', regionClass: 'purple', dest: '東京', date: '2026/03/15', status: '出差中/待報支', statusClass: 'expense', amount: '$45,200' },
-    { id: 'BTO20260225-008', name: '張大方', region: '國內', regionClass: 'blue', dest: '高雄', date: '2026/03/01', status: '已結案', statusClass: 'closed', amount: '$12,800' },
-    { id: 'BTO20260220-005', name: '陳美玲', region: '國外', regionClass: 'purple', dest: '上海', date: '2026/02/25', status: '財務審核中', statusClass: 'finance', amount: '$38,000' },
-  ];
-
-  const roleNames = { employee: '王小明', manager: '張部長', finance: '林會計', admin: '周管理' };
-  const myName = roleNames[role];
-
-  let rows;
-  if (role === 'employee') {
-    title.textContent = '我的申請紀錄';
-    viewAllBtn.textContent = '查看全部';
-    viewAllBtn.onclick = () => navigateTo('myApplications');
-    rows = allRecords.filter(r => r.name === myName);
-    if (rows.length === 0) {
-      rows = [allRecords[0]]; // demo: show at least own record
-    }
-  } else if (role === 'manager') {
-    title.textContent = '我的申請 & 審核紀錄';
-    viewAllBtn.textContent = '查看全部';
-    viewAllBtn.onclick = () => navigateTo('myApplications');
-    rows = [allRecords[0], allRecords[1]]; // own + reviewed
-  } else if (role === 'finance' || role === 'admin') {
-    title.textContent = '全部申請紀錄';
-    viewAllBtn.textContent = '查看全部';
-    viewAllBtn.onclick = () => navigateTo('allRecords');
-    rows = allRecords;
-  } else {
-    rows = [];
-  }
-
-  tbody.innerHTML = rows.map(r => `
-    <tr class="hover:bg-gray-50 cursor-pointer" onclick="navigateTo('viewApplication', '${r.id}')">
-      <td class="px-6 py-3 text-primary-600 font-medium">${r.id}</td>
-      <td class="px-6 py-3">${r.name}</td>
-      <td class="px-6 py-3"><span class="px-2 py-0.5 bg-${r.regionClass}-100 text-${r.regionClass}-700 rounded text-xs">${r.region}</span></td>
-      <td class="px-6 py-3">${r.dest}</td>
-      <td class="px-6 py-3">${r.date}</td>
-      <td class="px-6 py-3"><span class="status-badge status-${r.statusClass}">${r.status}</span></td>
-      <td class="px-6 py-3 font-medium">${r.amount}</td>
-    </tr>
-  `).join('');
-}
-
 // --- Init ---
 document.addEventListener('DOMContentLoaded', () => {
-  // Set current date
   const now = new Date();
   const dateStr = now.getFullYear() + '/' +
     String(now.getMonth() + 1).padStart(2, '0') + '/' +
     String(now.getDate()).padStart(2, '0');
-  document.getElementById('currentDate').textContent = dateStr;
+  const dateEl = document.getElementById('currentDate');
+  if (dateEl) dateEl.textContent = dateStr;
 });
