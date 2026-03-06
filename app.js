@@ -389,6 +389,50 @@ function updateDashboard(role) {
   renderAllRecordCards();
 }
 
+// --- Mini Timeline for Desktop Cards ---
+function buildMiniTimeline(r) {
+  // steps: 0=申請, 1=主管審核, 2=費用報支, 3=結案
+  // status: 'done', 'active', 'pending'
+  const steps = [
+    { label: '申請', status: 'done' },
+    { label: '主管審核', status: 'pending' },
+    { label: '費用報支', status: 'pending' },
+    { label: '結案', status: 'pending' },
+  ];
+
+  if (r.statusClass === 'pending') {
+    steps[1].status = 'active';
+  } else if (r.statusClass === 'expense') {
+    steps[1].status = 'done';
+    steps[2].status = 'active';
+  } else if (r.statusClass === 'finance') {
+    steps[1].status = 'done';
+    steps[2].status = 'done';
+    steps[3].status = 'active';
+  } else if (r.statusClass === 'closed' || r.statusClass === 'approved') {
+    steps[1].status = 'done';
+    steps[2].status = 'done';
+    steps[3].status = 'done';
+  }
+
+  const stepHtml = steps.map((s, i) => {
+    const dot = s.status === 'done'
+      ? '<div class="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></div>'
+      : s.status === 'active'
+        ? '<div class="w-5 h-5 bg-amber-400 rounded-full animate-pulse"></div>'
+        : '<div class="w-5 h-5 bg-gray-200 rounded-full"></div>';
+    const textColor = s.status === 'done' ? 'text-emerald-600' : s.status === 'active' ? 'text-amber-600 font-medium' : 'text-gray-300';
+    const line = i < steps.length - 1
+      ? `<div class="h-0.5 w-8 ${s.status === 'done' ? 'bg-emerald-400' : 'bg-gray-200'}" style="margin-top:10px;flex-shrink:0"></div>`
+      : '';
+    return `<div class="flex flex-col items-center" style="min-width:48px">
+      ${dot}<span class="text-[10px] ${textColor} mt-0.5">${s.label}</span>
+    </div>${line}`;
+  }).join('');
+
+  return `<div class="flex items-start">${stepHtml}</div>`;
+}
+
 // --- Card Rendering ---
 function renderRecordCards(containerId, records, role) {
   const container = document.getElementById(containerId);
@@ -407,21 +451,41 @@ function renderRecordCards(containerId, records, role) {
 
     return `
       <div class="record-card" onclick="${clickTarget}">
-        <div class="flex items-start justify-between mb-2">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold text-primary-600">${r.id.slice(-7)}</span>
-            <span class="px-1.5 py-0.5 bg-${r.regionClass}-100 text-${r.regionClass}-700 rounded text-[10px]">${r.region}</span>
+        <div class="md:hidden">
+          <div class="flex items-start justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold text-primary-600">${r.id.slice(-7)}</span>
+              <span class="px-1.5 py-0.5 bg-${r.regionClass}-100 text-${r.regionClass}-700 rounded text-[10px]">${r.region}</span>
+            </div>
+            <span class="status-badge status-${r.statusClass}">${r.status}</span>
           </div>
-          <span class="status-badge status-${r.statusClass}">${r.status}</span>
-        </div>
-        <div class="flex items-center justify-between">
-          <div class="text-sm text-gray-800">
-            <span class="font-medium">${r.dest}</span>
-            <span class="text-gray-400 text-xs ml-2">${r.date || r.startDate}</span>
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-800">
+              <span class="font-medium">${r.dest}</span>
+              <span class="text-gray-400 text-xs ml-2">${r.date || r.startDate}</span>
+            </div>
+            <span class="text-sm font-bold text-gray-700">${amountStr}</span>
           </div>
-          <span class="text-sm font-bold text-gray-700">${amountStr}</span>
+          ${r.name && role !== 'employee' ? `<p class="text-xs text-gray-400 mt-1">${r.name} - ${r.dept || ''}</p>` : ''}
         </div>
-        ${r.name && role !== 'employee' ? `<p class="text-xs text-gray-400 mt-1">${r.name} - ${r.dept || ''}</p>` : ''}
+        <div class="hidden md:flex md:items-center md:justify-between md:gap-4">
+          <div class="flex-shrink-0" style="width:180px">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-semibold text-primary-600">${r.id.slice(-7)}</span>
+              <span class="px-1.5 py-0.5 bg-${r.regionClass}-100 text-${r.regionClass}-700 rounded text-[10px]">${r.region}</span>
+            </div>
+            <div class="text-sm text-gray-800">
+              <span class="font-medium">${r.dest}</span>
+              <span class="text-gray-400 text-xs ml-1">${r.date || r.startDate}</span>
+            </div>
+            ${r.name && role !== 'employee' ? `<p class="text-xs text-gray-400 mt-0.5">${r.name} - ${r.dept || ''}</p>` : ''}
+          </div>
+          <div class="flex-shrink-0">${buildMiniTimeline(r)}</div>
+          <div class="flex-shrink-0 text-right" style="width:100px">
+            <span class="status-badge status-${r.statusClass}">${r.status}</span>
+            <p class="text-sm font-bold text-gray-700 mt-1">${amountStr}</p>
+          </div>
+        </div>
       </div>
     `;
   }).join('');
