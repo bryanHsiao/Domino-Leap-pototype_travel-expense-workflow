@@ -7,14 +7,14 @@ let currentPage = 'dashboard';
 
 // --- Demo Data ---
 const allRecords = [
-  { id: 'BTO20260301-001', name: '王小明', dept: '資訊部', region: '國內', regionClass: 'blue', dest: '台中', startDate: '2026/03/10', endDate: '2026/03/12', days: 3, status: '主管審核中', statusClass: 'pending', amount: 3500 },
-  { id: 'BTO20260228-012', name: '李小華', dept: '業務部', region: '國外', regionClass: 'purple', dest: '東京', startDate: '2026/03/15', endDate: '2026/03/19', days: 5, status: '出差中/待報支', statusClass: 'expense', amount: 45200 },
-  { id: 'BTO20260225-008', name: '張大方', dept: '業務部', region: '國內', regionClass: 'blue', dest: '高雄', startDate: '2026/03/01', endDate: '2026/03/03', days: 3, status: '已結案', statusClass: 'closed', amount: 12800 },
-  { id: 'BTO20260220-005', name: '陳美玲', dept: '業務部', region: '國外', regionClass: 'purple', dest: '上海', startDate: '2026/02/25', endDate: '2026/02/28', days: 4, status: '財務審核中', statusClass: 'finance', amount: 38000 },
-  { id: 'BTO20260305-002', name: '林志偉', dept: '研發部', region: '國內', regionClass: 'blue', dest: '新竹', startDate: '2026/03/08', endDate: '2026/03/08', days: 1, status: '主管審核中', statusClass: 'pending', amount: 0 },
-  { id: 'BTO20260225-003', name: '王小明', dept: '資訊部', region: '國外', regionClass: 'purple', dest: '東京', startDate: '2026/03/05', endDate: '2026/03/08', days: 4, status: '出差中/待報支', statusClass: 'expense', amount: 0 },
-  { id: 'BTO20260210-007', name: '王小明', dept: '資訊部', region: '國內', regionClass: 'blue', dest: '新竹', startDate: '2026/02/15', endDate: '2026/02/15', days: 1, status: '已結案', statusClass: 'closed', amount: 1200 },
-  { id: 'BTO20260130-002', name: '王小明', dept: '資訊部', region: '國內', regionClass: 'blue', dest: '高雄', startDate: '2026/02/03', endDate: '2026/02/05', days: 3, status: '已結案', statusClass: 'closed', amount: 8500 },
+  { id: 'BTO20260301-001', name: '王小明', dept: '資訊部', empId: 'A00012', title: '工程師', region: '國內', regionClass: 'blue', dest: '台中', startDate: '2026/03/10', endDate: '2026/03/12', days: 3, status: '主管審核中', statusClass: 'pending', amount: 3500, reason: '客戶需求訪談', contact: 'ABC 科技 - 王經理', transport: '大眾運輸', agent: '李小華', description: '前往台中拜訪 ABC 科技，進行新專案需求訪談及技術討論。', applyDate: '2026/03/01' },
+  { id: 'BTO20260228-012', name: '李小華', dept: '業務部', empId: 'B00045', title: '業務專員', region: '國外', regionClass: 'purple', dest: '東京', startDate: '2026/03/15', endDate: '2026/03/19', days: 5, status: '出差中/待報支', statusClass: 'expense', amount: 45200, reason: '海外客戶拜訪', contact: 'XYZ Corp - 田中部長', transport: '飛機', agent: '張大方', description: '前往東京拜訪 XYZ Corp，洽談年度合約續約事宜。', applyDate: '2026/02/28' },
+  { id: 'BTO20260225-008', name: '張大方', dept: '業務部', empId: 'B00032', title: '資深業務', region: '國內', regionClass: 'blue', dest: '高雄', startDate: '2026/03/01', endDate: '2026/03/03', days: 3, status: '已結案', statusClass: 'closed', amount: 12800, reason: '南區客戶拜訪', contact: 'DEF 企業 - 陳總', transport: '高鐵', agent: '李小華', description: '高雄南區客戶年度拜訪與合約檢討。', applyDate: '2026/02/25' },
+  { id: 'BTO20260220-005', name: '陳美玲', dept: '業務部', empId: 'B00018', title: '業務經理', region: '國外', regionClass: 'purple', dest: '上海', startDate: '2026/02/25', endDate: '2026/02/28', days: 4, status: '財務審核中', statusClass: 'finance', amount: 38000, reason: '中國市場調研', contact: '上海分公司 - 劉經理', transport: '飛機', agent: '張大方', description: '前往上海進行市場調研及分公司業務協調。', applyDate: '2026/02/20' },
+  { id: 'BTO20260305-002', name: '林志偉', dept: '研發部', empId: 'C00021', title: '研發工程師', region: '國內', regionClass: 'blue', dest: '新竹', startDate: '2026/03/08', endDate: '2026/03/08', days: 1, status: '主管審核中', statusClass: 'pending', amount: 0, reason: '技術交流', contact: '竹科園區 - GHI 科技', transport: '自駕', agent: '黃志明', description: '前往新竹科學園區與 GHI 科技進行技術交流。', applyDate: '2026/03/05' },
+  { id: 'BTO20260225-003', name: '王小明', dept: '資訊部', empId: 'A00012', title: '工程師', region: '國外', regionClass: 'purple', dest: '東京', startDate: '2026/03/05', endDate: '2026/03/08', days: 4, status: '出差中/待報支', statusClass: 'expense', amount: 0, reason: '技術研討會', contact: 'AWS Summit Tokyo', transport: '飛機', agent: '李小華', description: '參加 AWS Summit Tokyo 2026 技術研討會。', applyDate: '2026/02/25' },
+  { id: 'BTO20260210-007', name: '王小明', dept: '資訊部', empId: 'A00012', title: '工程師', region: '國內', regionClass: 'blue', dest: '新竹', startDate: '2026/02/15', endDate: '2026/02/15', days: 1, status: '已結案', statusClass: 'closed', amount: 1200, reason: '供應商會議', contact: 'JKL 系統 - 周經理', transport: '大眾運輸', agent: '李小華', description: '前往新竹與 JKL 系統討論系統整合方案。', applyDate: '2026/02/10' },
+  { id: 'BTO20260130-002', name: '王小明', dept: '資訊部', empId: 'A00012', title: '工程師', region: '國內', regionClass: 'blue', dest: '高雄', startDate: '2026/02/03', endDate: '2026/02/05', days: 3, status: '已結案', statusClass: 'closed', amount: 8500, reason: '系統部署', contact: '高雄分公司 - IT 部門', transport: '高鐵', agent: '李小華', description: '前往高雄分公司進行新系統部署及教育訓練。', applyDate: '2026/01/30' },
 ];
 
 const pendingReviews = [
@@ -162,7 +162,157 @@ function navigateTo(page, id) {
     newAppBtn.style.display = (page === 'dashboard' && (currentRole === 'employee' || currentRole === 'manager')) ? 'flex' : 'none';
   }
 
+  // Render dynamic detail page
+  if (page === 'viewApplication' && id) {
+    renderViewApplication(id);
+  }
+
   document.querySelector('main').scrollTop = 0;
+}
+
+// --- View Application Detail ---
+function renderViewApplication(id) {
+  const r = allRecords.find(rec => rec.id === id);
+  if (!r) return;
+
+  const container = document.getElementById('viewAppContent');
+  const amountStr = r.amount ? '$' + r.amount.toLocaleString() : '-';
+  const isExpense = r.statusClass === 'expense';
+  const isClosed = r.statusClass === 'closed';
+
+  // Build workflow timeline based on status
+  let timeline = '';
+  const checkIcon = '<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+  const clockIcon = '<svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+
+  const doneStep = (label, detail) => `
+    <div class="flex gap-3">
+      <div class="flex flex-col items-center">
+        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">${checkIcon}</div>
+        <div class="w-0.5 h-full bg-gray-200 mt-1"></div>
+      </div>
+      <div class="pb-4"><p class="text-sm font-medium text-gray-800">${label}</p><p class="text-xs text-gray-500 mt-0.5">${detail}</p></div>
+    </div>`;
+  const waitStep = (label, detail) => `
+    <div class="flex gap-3">
+      <div class="flex flex-col items-center">
+        <div class="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center animate-pulse">${clockIcon}</div>
+      </div>
+      <div><p class="text-sm font-medium text-amber-600">${label}</p><p class="text-xs text-gray-500 mt-0.5">${detail}</p></div>
+    </div>`;
+
+  timeline += doneStep('申請提交', `${r.name} - ${r.applyDate}`);
+  if (r.statusClass === 'pending') {
+    timeline += waitStep('等待主管審核', '審核人：張部長');
+  } else {
+    timeline += doneStep('主管已核准', '張部長 - ' + r.applyDate);
+    if (r.statusClass === 'expense') {
+      timeline += waitStep('出差中 / 待報支', `${r.startDate} ~ ${r.endDate}`);
+    } else if (r.statusClass === 'finance') {
+      timeline += doneStep('已報支', r.name);
+      timeline += waitStep('等待財務審核', '審核人：林會計');
+    } else if (r.statusClass === 'closed') {
+      timeline += doneStep('費用已報支', r.name);
+      timeline += doneStep('財務已核准', '林會計');
+      timeline += doneStep('已結案', '結案完成');
+    }
+  }
+
+  // Expense report section for "出差中/待報支" status
+  const expenseSection = isExpense ? `
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 md:p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <h3 class="font-bold text-amber-800">費用報支</h3>
+        <span class="text-xs bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full ml-auto">可隨時填寫</span>
+      </div>
+      <div id="viewExpenseCards" class="space-y-3">
+        <div class="bg-white rounded-lg p-3 border border-amber-100">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-gray-500">費用類別</label>
+              <select class="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm">
+                <option>交通費</option><option>住宿費</option><option>膳雜費</option><option>其他</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] text-gray-500">金額</label>
+              <input type="number" placeholder="0" class="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm" />
+            </div>
+          </div>
+          <div class="mt-2">
+            <label class="text-[10px] text-gray-500">說明</label>
+            <input type="text" placeholder="費用說明" class="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm" />
+          </div>
+        </div>
+      </div>
+      <button onclick="addViewExpenseCard()" class="w-full mt-3 py-2 border-2 border-dashed border-amber-300 rounded-lg text-amber-600 text-sm hover:bg-amber-100 transition-colors">+ 新增費用項目</button>
+      <button onclick="showToast('費用報支已暫存')" class="w-full mt-3 bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-lg text-sm font-medium transition-colors">暫存報支資料</button>
+      <button onclick="showToast('報支已送出，等待財務審核')" class="w-full mt-2 bg-primary-600 hover:bg-primary-700 text-white py-2.5 rounded-lg text-sm font-medium transition-colors">送出報支</button>
+    </div>` : '';
+
+  container.innerHTML = `
+    <button onclick="navigateTo(currentRole === 'employee' ? 'myApplications' : 'allRecords')" class="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      返回
+    </button>
+    ${isExpense ? expenseSection : ''}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 md:p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <h3 class="font-bold text-gray-800">${r.id}</h3>
+        <span class="status-badge status-${r.statusClass}">${r.status}</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <div><span class="text-gray-400">申請者</span><p class="text-gray-800 font-medium">${r.name}（${r.empId}）</p></div>
+        <div><span class="text-gray-400">部門 / 職級</span><p class="text-gray-800">${r.dept} / ${r.title}</p></div>
+        <div><span class="text-gray-400">申請日期</span><p class="text-gray-800">${r.applyDate}</p></div>
+        <div><span class="text-gray-400">出差區域</span><p><span class="px-2 py-0.5 bg-${r.regionClass}-100 text-${r.regionClass}-700 rounded text-xs">${r.region}</span></p></div>
+        <div><span class="text-gray-400">出發日期</span><p class="text-gray-800">${r.startDate}</p></div>
+        <div><span class="text-gray-400">結束日期</span><p class="text-gray-800">${r.endDate}</p></div>
+        <div><span class="text-gray-400">總計天數</span><p class="text-gray-800">${r.days} 天</p></div>
+        <div><span class="text-gray-400">出差地點</span><p class="text-gray-800">${r.dest}</p></div>
+        <div><span class="text-gray-400">出差原因</span><p class="text-gray-800">${r.reason}</p></div>
+        <div><span class="text-gray-400">拜訪對象</span><p class="text-gray-800">${r.contact}</p></div>
+        <div><span class="text-gray-400">交通工具</span><p class="text-gray-800">${r.transport}</p></div>
+        <div><span class="text-gray-400">代理人</span><p class="text-gray-800">${r.agent}</p></div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-gray-100 text-sm">
+        <span class="text-gray-400">出差說明</span>
+        <p class="text-gray-800 mt-1">${r.description}</p>
+      </div>
+      ${r.amount ? `<div class="mt-3 pt-3 border-t border-gray-100 grid grid-cols-2 gap-3 text-sm">
+        <div><span class="text-gray-400">是否報支</span><p class="text-gray-800">是</p></div>
+        <div><span class="text-gray-400">預估金額</span><p class="text-gray-800 font-bold">${amountStr}</p></div>
+      </div>` : ''}
+    </div>
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 md:p-6">
+      <h3 class="font-semibold text-gray-800 text-sm mb-4">審核歷程</h3>
+      <div class="space-y-4">${timeline}</div>
+    </div>`;
+}
+
+function addViewExpenseCard() {
+  const container = document.getElementById('viewExpenseCards');
+  const card = document.createElement('div');
+  card.className = 'bg-white rounded-lg p-3 border border-amber-100';
+  card.innerHTML = `
+    <div class="grid grid-cols-2 gap-2">
+      <div>
+        <label class="text-[10px] text-gray-500">費用類別</label>
+        <select class="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm">
+          <option>交通費</option><option>住宿費</option><option>膳雜費</option><option>其他</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-[10px] text-gray-500">金額</label>
+        <input type="number" placeholder="0" class="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm" />
+      </div>
+    </div>
+    <div class="mt-2">
+      <label class="text-[10px] text-gray-500">說明</label>
+      <input type="text" placeholder="費用說明" class="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm" />
+    </div>`;
+  container.appendChild(card);
 }
 
 // --- Dashboard ---
@@ -190,6 +340,28 @@ function updateDashboard(role) {
 
   const titleEl = document.getElementById('dashboardCardTitle');
   const viewAllBtn = document.getElementById('dashboardViewAll');
+
+  // Show expense alert for employee with pending expense records
+  const expenseAlert = document.getElementById('expenseAlert');
+  if (expenseAlert) {
+    const myExpenseRecords = allRecords.filter(r => r.name === myName && r.statusClass === 'expense');
+    if (role === 'employee' && myExpenseRecords.length > 0) {
+      expenseAlert.style.display = 'block';
+      expenseAlert.innerHTML = myExpenseRecords.map(r => `
+        <div onclick="navigateTo('viewApplication','${r.id}')" class="flex items-center justify-between cursor-pointer hover:bg-amber-100 rounded-lg p-2 -mx-2 transition-colors">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <div>
+              <p class="text-sm font-medium text-amber-800">${r.dest} 出差待報支</p>
+              <p class="text-xs text-amber-600">${r.startDate} ~ ${r.endDate}</p>
+            </div>
+          </div>
+          <span class="text-xs bg-amber-600 text-white px-2.5 py-1 rounded-full font-medium">立即報支</span>
+        </div>`).join('');
+    } else {
+      expenseAlert.style.display = 'none';
+    }
+  }
 
   if (role === 'employee') {
     titleEl.textContent = '我的申請紀錄';
