@@ -83,10 +83,60 @@ function selectRole(role) {
   navigateTo('dashboard');
 }
 
+function quickNewApplication() {
+  selectRole('employee');
+  navigateTo('newApplication');
+}
+
 function logout() {
   document.getElementById('roleModal').classList.remove('hidden');
   document.getElementById('appShell').classList.add('hidden');
   currentRole = '';
+}
+
+// --- Field Hint (show on focus, hide on blur) ---
+function showFieldHint(id) {
+  const dot = document.getElementById(id);
+  if (!dot) return;
+  // Ensure enough space below for native dropdowns
+  const input = dot.closest('div')?.querySelector('select, input');
+  if (input) {
+    const rect = input.getBoundingClientRect();
+    const viewportH = window.innerHeight;
+    const spaceBelow = viewportH - rect.bottom;
+    if (spaceBelow < 220) {
+      const scrollContainer = document.querySelector('main');
+      if (scrollContainer) {
+        scrollContainer.scrollBy({ top: 220 - spaceBelow, behavior: 'smooth' });
+      }
+    }
+  }
+  dot.classList.add('hint-active');
+}
+function hideFieldHint(id) {
+  const dot = document.getElementById(id);
+  if (dot) dot.classList.remove('hint-active');
+}
+
+// Show/hide hint dot near a form element (for expense cards without IDs)
+function showNearHint(el) {
+  const dot = el.closest('div')?.querySelector('.hint-dot');
+  if (!dot) return;
+  // Auto-scroll to make space below for dropdown + tooltip
+  const rect = el.getBoundingClientRect();
+  const viewportH = window.innerHeight;
+  const spaceBelow = viewportH - rect.bottom;
+  if (spaceBelow < 220) {
+    const scrollContainer = document.querySelector('main');
+    if (scrollContainer) {
+      scrollContainer.scrollBy({ top: 220 - spaceBelow, behavior: 'smooth' });
+    }
+  }
+  dot.classList.add('hint-active');
+}
+function hideNearHint(el) {
+  const dot = el.closest('div')?.querySelector('.hint-dot');
+  if (dot) dot.classList.remove('hint-active');
 }
 
 // --- Bottom Tab Bar ---
@@ -582,8 +632,13 @@ function calcDays() {
 // --- Expense Section ---
 function toggleExpenseSection(show) {
   const section = document.getElementById('expenseSection');
-  if (show) section.classList.remove('hidden');
-  else section.classList.add('hidden');
+  showFieldHint('hintExpense');
+  setTimeout(() => hideFieldHint('hintExpense'), 5000);
+  if (show) {
+    section.classList.remove('hidden');
+  } else {
+    section.classList.add('hidden');
+  }
 }
 
 function addExpenseCard() {
@@ -591,19 +646,34 @@ function addExpenseCard() {
   const card = document.createElement('div');
   card.className = 'expense-card border border-gray-200 rounded-lg p-3 space-y-2';
   card.innerHTML = `
-    <div class="flex items-center justify-between">
-      <select class="px-2 py-1.5 border border-gray-200 rounded text-sm flex-1 mr-2">
-        <option value="">費用類別</option><option>膳雜費</option><option>住宿費</option><option>交通費</option><option>其他</option>
-      </select>
-      <select class="px-2 py-1.5 border border-gray-200 rounded text-sm w-20">
-        <option>TWD</option><option>USD</option><option>JPY</option><option>CNY</option><option>EUR</option>
-      </select>
-      <button onclick="removeExpenseCard(this)" class="text-red-400 hover:text-red-600 ml-2 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    <div class="flex items-start gap-2">
+      <div class="flex-1">
+        <label class="text-[10px] text-gray-400 flex items-center gap-1">費用類別 <span class="hint-dot hint-field" style="position:relative;top:0;right:0;flex-shrink:0;">i<span class="hint-tooltip">費用類別可依企業需求自定義，支援多幣別匯率換算及 ERP 拋轉。</span></span></label>
+        <select class="w-full px-2 py-1.5 border border-gray-200 rounded text-sm" onfocus="showNearHint(this)" onblur="hideNearHint(this)">
+          <option value="">請選擇</option><option>膳雜費</option><option>住宿費</option><option>交通費</option><option>其他</option>
+        </select>
+      </div>
+      <div class="w-24">
+        <label class="text-[10px] text-gray-400 flex items-center gap-1">幣別 <span class="hint-dot hint-field" style="position:relative;top:0;right:0;flex-shrink:0;">i<span class="hint-tooltip">幣別清單可由後端資料庫動態提供，無須寫死於前端，支援即時匯率換算。</span></span></label>
+        <select class="w-full px-2 py-1.5 border border-gray-200 rounded text-sm" onfocus="showNearHint(this)" onblur="hideNearHint(this)">
+          <option>TWD</option><option>USD</option><option>JPY</option><option>CNY</option><option>EUR</option>
+        </select>
+      </div>
+      <button onclick="removeExpenseCard(this)" class="text-red-400 hover:text-red-600 mt-4 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
     </div>
     <div class="grid grid-cols-3 gap-2">
       <div><label class="text-[10px] text-gray-400">單價</label><input type="number" placeholder="0" class="expense-price w-full px-2 py-1.5 border border-gray-200 rounded text-sm text-right" oninput="calcExpenseCard(this)" /></div>
       <div><label class="text-[10px] text-gray-400">數量</label><input type="number" placeholder="0" class="expense-qty w-full px-2 py-1.5 border border-gray-200 rounded text-sm text-right" oninput="calcExpenseCard(this)" /></div>
       <div><label class="text-[10px] text-gray-400">小計</label><input type="text" readonly class="expense-subtotal w-full px-2 py-1.5 bg-gray-100 border border-gray-200 rounded text-sm text-right" value="$0" /></div>
+    </div>
+    <div class="expense-receipt border border-dashed border-gray-300 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-primary-400 hover:bg-primary-50/30 transition-colors">
+      <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs text-gray-500">上傳收據 <span class="text-[10px] text-gray-400">（PDF, JPG, PNG，最大 10MB）</span></p>
+      </div>
+      <span class="hint-dot hint-below hint-field" style="position:relative;top:0;right:0;">i<span class="hint-tooltip">支援收據 OCR 智慧辨識，上傳後可自動擷取金額、日期、商家等資訊，減少人工輸入。實際導入時可依需求啟用或關閉此功能。</span></span>
     </div>
   `;
   container.appendChild(card);
@@ -680,6 +750,46 @@ function saveDraft() {
 }
 
 function submitApplication() {
+  // Validate required fields
+  const fields = [
+    { id: 'startDate', label: '出發日期' },
+    { id: 'endDate', label: '結束日期' },
+    { id: 'formRegion', label: '出差區域' },
+    { id: 'formDest', label: '出差地點' },
+    { id: 'formReason', label: '出差原因' },
+    { id: 'formContact', label: '拜訪對象' },
+    { id: 'formTransport', label: '往返交通工具' },
+  ];
+
+  let missing = [];
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (!el) return;
+    const val = el.value.trim();
+    if (!val) {
+      missing.push(f.label);
+      el.classList.add('border-red-500');
+      el.classList.remove('border-gray-300');
+    } else {
+      el.classList.remove('border-red-500');
+      el.classList.add('border-gray-300');
+    }
+  });
+
+  // Check radio: 是否報支旅費
+  const claimChecked = document.querySelector('input[name="claimExpense"]:checked');
+  if (!claimChecked) {
+    missing.push('是否報支旅費');
+  }
+
+  if (missing.length > 0) {
+    showToast('請填寫必填欄位：' + missing.join('、'), 'error');
+    // Scroll to first invalid field
+    const firstInvalid = document.querySelector('.border-red-500');
+    if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
   document.getElementById('confirmModal').classList.remove('hidden');
 }
 
@@ -691,6 +801,51 @@ function confirmSubmit() {
   closeModal();
   showToast('出差申請已提交，通知已發送給主管', 'success');
   setTimeout(() => navigateTo('myApplications'), 1500);
+}
+
+// --- Void Application ---
+function voidApplication() {
+  document.getElementById('voidModal').classList.remove('hidden');
+}
+
+function closeVoidModal() {
+  document.getElementById('voidModal').classList.add('hidden');
+}
+
+function confirmVoid() {
+  closeVoidModal();
+  showToast('申請單已作廢', 'warning');
+  setTimeout(() => navigateTo('myApplications'), 1500);
+}
+
+// --- Notification Panel ---
+function toggleNotificationPanel() {
+  const panel = document.getElementById('notificationPanel');
+  panel.classList.toggle('hidden');
+  // Close on outside click
+  if (!panel.classList.contains('hidden')) {
+    setTimeout(() => {
+      document.addEventListener('click', closeNotificationOnOutside);
+    }, 100);
+  }
+}
+function closeNotificationOnOutside(e) {
+  const panel = document.getElementById('notificationPanel');
+  if (panel && !panel.closest('div').contains(e.target)) {
+    panel.classList.add('hidden');
+    document.removeEventListener('click', closeNotificationOnOutside);
+  }
+}
+function markAllRead() {
+  document.querySelectorAll('#notificationPanel .bg-primary-50\\/40').forEach(el => {
+    el.classList.remove('bg-primary-50/40');
+  });
+  document.querySelectorAll('#notificationPanel .bg-primary-500').forEach(dot => {
+    dot.remove();
+  });
+  const badge = document.querySelector('button[onclick="toggleNotificationPanel()"] .bg-red-500');
+  if (badge) badge.textContent = '0';
+  showToast('已標記全部已讀', 'success');
 }
 
 // --- Toast ---

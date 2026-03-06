@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>出差及報支系統</title>
+  <link rel="icon" type="image/png" href="./icon-leap.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -49,6 +50,12 @@
           <div class="text-left"><div class="font-semibold text-gray-800 text-sm">管理人員</div><div class="text-xs text-gray-500">數據維護、報表分析與導出</div></div>
         </button>
       </div>
+      <div class="mt-5 pt-4 border-t border-gray-200">
+        <button onclick="quickNewApplication()" class="w-full flex items-center justify-center gap-2 p-3 bg-primary-50 text-primary-700 rounded-xl hover:bg-primary-100 transition-all font-medium text-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          直接填寫出差申請單
+        </button>
+      </div>
     </div>
   </div>
 
@@ -68,7 +75,8 @@
           </div>
         </div>
       </div>
-      <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+      <nav class="flex-1 p-3 space-y-1 relative">
+        <span class="hint-dot hint-below hint-left absolute top-2 right-3 z-10" style="">i<span class="hint-tooltip">導航選單可依組織架構自定義項目與角色權限，支援多層級選單與動態顯示/隱藏。</span></span>
         <button onclick="navigateTo('dashboard')" data-nav="dashboard" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
           儀表板
@@ -96,7 +104,8 @@
         </button>
       </nav>
       <div class="p-4 border-t border-white/10">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 relative">
+          <span class="hint-dot hint-left absolute -top-5 right-0 z-10" style="">i<span class="hint-tooltip">可整合 SSO 單一登入（如 Azure AD、LDAP），自動同步組織人員與部門資料。</span></span>
           <div id="userAvatarDesktop" class="w-9 h-9 bg-primary-400 rounded-full flex items-center justify-center text-sm font-semibold">王</div>
           <div class="flex-1 min-w-0">
             <div id="userNameDesktop" class="text-sm font-medium truncate">王小明</div>
@@ -135,14 +144,65 @@
           <span class="text-sm text-gray-400" id="currentDate">2026/03/07</span>
         </div>
         <div class="flex items-center gap-4">
+          <span class="hint-dot hint-below hint-field" id="hintSearch">i<span class="hint-tooltip">可整合全文檢索引擎，支援申請單號、地點、申請人等多維度搜尋，亦可串接後端即時查詢。</span></span>
           <div class="relative">
             <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <input type="text" placeholder="搜尋申請單號、地點..." class="pl-9 pr-4 py-1.5 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:bg-white w-56 transition-colors" />
+            <input type="text" placeholder="搜尋申請單號、地點..." class="pl-9 pr-4 py-1.5 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:bg-white w-56 transition-colors" onfocus="showFieldHint('hintSearch')" onblur="hideFieldHint('hintSearch')" />
           </div>
-          <button class="relative text-gray-400 hover:text-gray-600 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-            <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
-          </button>
+          <div class="relative">
+            <button onclick="toggleNotificationPanel()" class="relative text-gray-400 hover:text-gray-600 transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+              <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
+            </button>
+            <!-- Notification Panel -->
+            <div id="notificationPanel" class="hidden absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 z-50">
+              <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 rounded-t-xl flex items-center justify-between">
+                <span class="text-sm font-semibold text-gray-700">通知</span>
+                <span class="text-[10px] text-primary-600 cursor-pointer hover:underline" onclick="markAllRead()">全部已讀</span>
+              </div>
+              <div id="notificationHintBanner" class="m-2 px-3 py-2 rounded-lg flex items-start gap-2" style="background:#fffbeb;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.1);">
+                <span class="w-4 h-4 rounded-full bg-orange-500 text-white text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5" style="box-shadow: 0 0 0 3px rgba(249,115,22,0.25);">i</span>
+                <p class="text-[11px] leading-relaxed" style="color:#92400e;">通知中心可整合 Email、LINE、Teams 等推播管道，即時通知審核進度與待辦事項。</p>
+              </div>
+              <div class="max-h-64 overflow-y-auto">
+                <div class="px-4 py-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer flex gap-3 bg-primary-50/40">
+                  <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-medium text-gray-800">出差申請待審核</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5">301-001 台中出差已送交主管審核</p>
+                    <p class="text-[10px] text-gray-400 mt-1">10 分鐘前</p>
+                  </div>
+                  <div class="w-2 h-2 bg-primary-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                </div>
+                <div class="px-4 py-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer flex gap-3 bg-primary-50/40">
+                  <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-medium text-gray-800">費用報支已核准</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5">210-007 新竹出差費用已完成核銷</p>
+                    <p class="text-[10px] text-gray-400 mt-1">2 小時前</p>
+                  </div>
+                  <div class="w-2 h-2 bg-primary-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                </div>
+                <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer flex gap-3">
+                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-gray-600">系統公告</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5">差旅費標準已更新，請查閱最新規定</p>
+                    <p class="text-[10px] text-gray-400 mt-1">昨天</p>
+                  </div>
+                </div>
+              </div>
+              <div class="px-4 py-2.5 bg-gray-50 border-t border-gray-100 rounded-b-xl text-center">
+                <span class="text-xs text-primary-600 cursor-pointer hover:underline">查看全部通知</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </header>
@@ -153,7 +213,8 @@
       <!-- Page: Dashboard -->
       <div id="page-dashboard" class="page p-4 md:p-6 space-y-4 md:space-y-6 max-w-5xl mx-auto">
         <!-- Stats Cards (2x2 on mobile) -->
-        <div id="statsCards" class="grid grid-cols-4 gap-2 md:gap-4">
+        <div id="statsCards" class="grid grid-cols-4 gap-2 md:gap-4 relative">
+          <span class="hint-dot hint-below hint-left absolute -top-2 -left-2 z-20">i<span class="hint-tooltip">統計卡片可連接後端 API 動態計算，依角色顯示不同 KPI 指標。點擊可篩選對應紀錄。</span></span>
           <div onclick="filterByStatus('all')" class="stat-card bg-white rounded-xl px-3 py-2.5 md:p-5 border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow active:bg-gray-50 text-center">
             <p class="text-[10px] md:text-sm text-gray-500">本月申請</p>
             <p id="statTotal" class="text-lg md:text-2xl font-bold text-gray-800 mt-0.5">0</p>
@@ -173,7 +234,8 @@
         </div>
 
         <!-- Expense Alert (for employee with pending expense) -->
-        <div id="expenseAlert" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-3 md:p-4">
+        <div id="expenseAlert" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-3 md:p-4 relative">
+          <span class="hint-dot hint-below hint-left absolute -top-2 -left-2 z-20">i<span class="hint-tooltip">可連接行事曆與差旅系統，自動偵測出差結束後提醒員工即時報支，不需等回公司。</span></span>
           <!-- Dynamically rendered by JS -->
         </div>
 
@@ -186,7 +248,7 @@
         <!-- Record Cards (dynamic by role) -->
         <div>
           <div class="flex items-center justify-between mb-3">
-            <h3 id="dashboardCardTitle" class="font-semibold text-gray-800 text-sm md:text-base">我的申請紀錄</h3>
+            <h3 id="dashboardCardTitle" class="font-semibold text-gray-800 text-sm md:text-base flex items-center gap-2">我的申請紀錄 <span class="hint-dot hint-below">i<span class="hint-tooltip">卡片欄位可依業務需求增減，支援自定義排序、分群篩選，以及匯出 Excel 報表功能。</span></span></h3>
             <button id="dashboardViewAll" class="text-xs md:text-sm text-primary-600 hover:text-primary-700 font-medium">查看全部</button>
           </div>
           <div id="dashboardCards" class="space-y-3">
@@ -200,7 +262,8 @@
         <div class="max-w-4xl mx-auto space-y-4 md:space-y-6">
 
           <!-- Workflow Progress -->
-          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 md:p-6">
+          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 md:p-6 relative">
+            <span class="hint-dot hint-below hint-right absolute top-3 right-3 z-10">i<span class="hint-tooltip">審核流程可自定義關卡數量與順序，整合簽核引擎（如平行會簽、條件分支），並支援自動跳關與代理人機制。</span></span>
             <div class="flex items-center justify-between">
               <div class="flex flex-col items-center flex-1">
                 <div class="w-7 h-7 md:w-8 md:h-8 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
@@ -230,6 +293,7 @@
               <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 文件資訊
+                <span class="hint-dot hint-below ml-auto">i<span class="hint-tooltip">申請者與日期可整合 HR 系統自動帶入，支援依員工工號查詢部門、職稱與主管資訊。</span></span>
               </h3>
             </div>
             <div class="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
@@ -250,6 +314,7 @@
               <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 行程資訊
+                <span class="hint-dot hint-below ml-auto">i<span class="hint-tooltip">表單欄位可彈性增減，各欄位的選項清單與資料來源皆可對接企業既有系統動態載入。</span></span>
               </h3>
             </div>
             <div class="p-4 md:p-6 space-y-3 md:space-y-4">
@@ -285,19 +350,19 @@
                   <input type="text" id="formReason" placeholder="請輸入出差原因" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
                 </div>
                 <div>
-                  <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">拜訪對象 <span class="text-red-500">*</span></label>
-                  <input type="text" id="formContact" placeholder="請輸入拜訪對象" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
+                  <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1 flex items-center gap-1">拜訪對象 <span class="text-red-500">*</span> <span class="hint-dot hint-field" id="hintContact" style="width:14px;height:14px;font-size:8px">i<span class="hint-tooltip">可串接 CRM 客戶資料庫，輸入時自動搜尋帶出客戶名稱與聯絡人，免手動輸入。</span></span></label>
+                  <input type="text" id="formContact" placeholder="請輸入拜訪對象" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" onfocus="showFieldHint('hintContact')" onblur="hideFieldHint('hintContact')" />
                 </div>
               </div>
               <div>
-                <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">往返交通工具 <span class="text-red-500">*</span></label>
-                <select id="formTransport" class="w-full md:w-1/2 px-3 py-2.5 border border-gray-300 rounded-lg text-sm">
+                <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1 flex items-center gap-1">往返交通工具 <span class="text-red-500">*</span> <span class="hint-dot hint-field" id="hintTransport" style="width:14px;height:14px;font-size:8px">i<span class="hint-tooltip">選項清單可從資料庫動態載入，並依出差區域（國內/國外）自動切換對應的交通方式。</span></span></label>
+                <select id="formTransport" class="w-full md:w-1/2 px-3 py-2.5 border border-gray-300 rounded-lg text-sm" onfocus="showFieldHint('hintTransport')" onblur="hideFieldHint('hintTransport')">
                   <option value="">請選擇</option><option>公務車</option><option>大眾運輸</option><option>私家車</option><option>飛機</option><option>自駕</option><option>高鐵</option>
                 </select>
               </div>
               <div>
-                <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">代理人</label>
-                <input type="text" id="formAgent" placeholder="搜尋員工姓名或工號..." class="w-full md:w-1/2 px-3 py-2.5 border border-gray-300 rounded-lg text-sm" />
+                <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1 flex items-center gap-1">代理人 <span class="hint-dot hint-field" id="hintAgent" style="width:14px;height:14px;font-size:8px">i<span class="hint-tooltip">可整合組織架構，自動帶出同部門人員清單供選擇，並連動代理人行事曆確認可用性。</span></span></label>
+                <input type="text" id="formAgent" placeholder="搜尋員工姓名或工號..." class="w-full md:w-1/2 px-3 py-2.5 border border-gray-300 rounded-lg text-sm" onfocus="showFieldHint('hintAgent')" onblur="hideFieldHint('hintAgent')" />
               </div>
               <div>
                 <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">出差說明</label>
@@ -312,6 +377,7 @@
               <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
                 <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 費用申請
+                <span class="hint-dot hint-right hint-field ml-auto" id="hintExpense">i<span class="hint-tooltip">本範本將出差申請與費用報支合併於同一表單，方便快速體驗完整流程。實際導入時可依企業需求拆分為獨立的「出差申請單」與「費用報支單」，出差結案後再由報支單關聯對應出差紀錄，實現更嚴謹的流程管控。</span></span>
               </h3>
             </div>
             <div class="p-4 md:p-6 space-y-3">
@@ -326,19 +392,34 @@
                 <!-- Mobile: Card-style expense items -->
                 <div id="expenseItems" class="space-y-3">
                   <div class="expense-card border border-gray-200 rounded-lg p-3 space-y-2">
-                    <div class="flex items-center justify-between">
-                      <select class="px-2 py-1.5 border border-gray-200 rounded text-sm flex-1 mr-2">
-                        <option value="">費用類別</option><option>膳雜費</option><option>住宿費</option><option>交通費</option><option>其他</option>
-                      </select>
-                      <select class="px-2 py-1.5 border border-gray-200 rounded text-sm w-20">
-                        <option>TWD</option><option>USD</option><option>JPY</option><option>CNY</option><option>EUR</option>
-                      </select>
-                      <button onclick="removeExpenseCard(this)" class="text-red-400 hover:text-red-600 ml-2 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                    <div class="flex items-start gap-2">
+                      <div class="flex-1">
+                        <label class="text-[10px] text-gray-400 flex items-center gap-1">費用類別 <span class="hint-dot hint-field" style="position:relative;top:0;right:0;flex-shrink:0;">i<span class="hint-tooltip">費用類別可依企業需求自定義，支援多幣別匯率換算及 ERP 拋轉。</span></span></label>
+                        <select class="w-full px-2 py-1.5 border border-gray-200 rounded text-sm" onfocus="showNearHint(this)" onblur="hideNearHint(this)">
+                          <option value="">請選擇</option><option>膳雜費</option><option>住宿費</option><option>交通費</option><option>其他</option>
+                        </select>
+                      </div>
+                      <div class="w-24">
+                        <label class="text-[10px] text-gray-400 flex items-center gap-1">幣別 <span class="hint-dot hint-field" style="position:relative;top:0;right:0;flex-shrink:0;">i<span class="hint-tooltip">幣別清單可由後端資料庫動態提供，無須寫死於前端，支援即時匯率換算。</span></span></label>
+                        <select class="w-full px-2 py-1.5 border border-gray-200 rounded text-sm" onfocus="showNearHint(this)" onblur="hideNearHint(this)">
+                          <option>TWD</option><option>USD</option><option>JPY</option><option>CNY</option><option>EUR</option>
+                        </select>
+                      </div>
+                      <button onclick="removeExpenseCard(this)" class="text-red-400 hover:text-red-600 mt-4 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                     </div>
                     <div class="grid grid-cols-3 gap-2">
                       <div><label class="text-[10px] text-gray-400">單價</label><input type="number" placeholder="0" class="expense-price w-full px-2 py-1.5 border border-gray-200 rounded text-sm text-right" oninput="calcExpenseCard(this)" /></div>
                       <div><label class="text-[10px] text-gray-400">數量</label><input type="number" placeholder="0" class="expense-qty w-full px-2 py-1.5 border border-gray-200 rounded text-sm text-right" oninput="calcExpenseCard(this)" /></div>
                       <div><label class="text-[10px] text-gray-400">小計</label><input type="text" readonly class="expense-subtotal w-full px-2 py-1.5 bg-gray-100 border border-gray-200 rounded text-sm text-right" value="$0" /></div>
+                    </div>
+                    <div class="expense-receipt border border-dashed border-gray-300 rounded-lg p-3 flex items-center gap-3 cursor-pointer hover:border-primary-400 hover:bg-primary-50/30 transition-colors">
+                      <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-xs text-gray-500">上傳收據 <span class="text-[10px] text-gray-400">（PDF, JPG, PNG，最大 10MB）</span></p>
+                      </div>
+                      <span class="hint-dot hint-below hint-field" style="position:relative;top:0;right:0;">i<span class="hint-tooltip">支援收據 OCR 智慧辨識，上傳後可自動擷取金額、日期、商家等資訊，減少人工輸入。實際導入時可依需求啟用或關閉此功能。</span></span>
                     </div>
                   </div>
                 </div>
@@ -349,18 +430,13 @@
                   </button>
                   <div class="text-sm"><span class="text-gray-500">合計：</span><span id="totalExpense" class="font-bold text-primary-600">$0</span></div>
                 </div>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  <svg class="w-8 h-8 text-gray-300 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                  <p class="text-xs text-gray-500">點擊上傳收據附件</p>
-                  <p class="text-[10px] text-gray-400 mt-0.5">PDF, JPG, PNG（最大 10MB）</p>
-                </div>
               </div>
             </div>
           </div>
 
           <!-- Action Buttons -->
           <div class="flex items-center justify-between bg-white rounded-xl border border-gray-100 shadow-sm p-3 md:p-4">
-            <button onclick="showToast('申請單已作廢', 'warning')" class="px-3 py-2 text-xs md:text-sm text-red-600 hover:bg-red-50 rounded-lg border border-red-200">作廢</button>
+            <button onclick="voidApplication()" class="px-3 py-2 text-xs md:text-sm text-red-600 hover:bg-red-50 rounded-lg border border-red-200">作廢</button>
             <div class="flex gap-2">
               <button onclick="saveDraft()" class="px-4 py-2 text-xs md:text-sm text-gray-600 hover:bg-gray-100 rounded-lg border border-gray-300">儲存草稿</button>
               <button onclick="submitApplication()" class="px-4 py-2 text-xs md:text-sm text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-sm flex items-center gap-1">
@@ -556,6 +632,21 @@
       <div class="flex gap-3">
         <button onclick="closeModal()" class="flex-1 px-4 py-2.5 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">取消</button>
         <button onclick="confirmSubmit()" class="flex-1 px-4 py-2.5 text-sm text-white bg-primary-600 hover:bg-primary-700 rounded-lg font-medium">確認提交</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Void Confirm Modal -->
+  <div id="voidModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full text-center">
+      <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+      </div>
+      <h3 class="text-lg font-bold text-gray-800 mb-2">確認作廢</h3>
+      <p class="text-sm text-gray-500 mb-5">作廢後此申請單將無法恢復，確定要作廢嗎？</p>
+      <div class="flex gap-3">
+        <button onclick="closeVoidModal()" class="flex-1 px-4 py-2.5 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">取消</button>
+        <button onclick="confirmVoid()" class="flex-1 px-4 py-2.5 text-sm text-white bg-red-600 hover:bg-red-700 rounded-lg font-medium">確認作廢</button>
       </div>
     </div>
   </div>
