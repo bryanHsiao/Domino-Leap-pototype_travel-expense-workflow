@@ -251,6 +251,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Mobile inline hint (replaces floating tooltip on mobile) */
 .inline-hint {
+  position: relative;
   background: #fffbeb;
   color: #92400e;
   padding: 10px 14px;
@@ -259,7 +260,16 @@ input:focus, select:focus, textarea:focus {
   font-size: 13px;
   font-weight: 500;
   line-height: 1.5;
+  margin-top: 4px;
   margin-bottom: 6px;
+}
+.inline-hint::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 16px;
+  border: 6px solid transparent;
+  border-bottom-color: #f97316;
 }
 
 /* iOS Safari date input fix */
