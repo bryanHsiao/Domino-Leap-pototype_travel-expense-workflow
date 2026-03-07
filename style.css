@@ -249,6 +249,19 @@ input:focus, select:focus, textarea:focus {
   display: block !important;
 }
 
+/* Mobile inline hint (replaces floating tooltip on mobile) */
+.inline-hint {
+  background: #fffbeb;
+  color: #92400e;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 2px dashed #f97316;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
 /* iOS Safari date input fix */
 input[type="date"] {
   min-width: 0 !important;

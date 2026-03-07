@@ -98,7 +98,22 @@ function logout() {
 function showFieldHint(id) {
   const dot = document.getElementById(id);
   if (!dot) return;
-  // Ensure enough space below for native dropdowns
+
+  // Mobile: inline hint below the field (no floating overlay)
+  if (window.innerWidth < 768) {
+    const fieldContainer = dot.closest('div');
+    const input = fieldContainer?.querySelector('select, input, textarea');
+    const tooltip = dot.querySelector('.hint-tooltip');
+    if (input && tooltip && !fieldContainer.querySelector('.inline-hint')) {
+      const hint = document.createElement('div');
+      hint.className = 'inline-hint';
+      hint.textContent = tooltip.textContent;
+      fieldContainer.appendChild(hint);
+    }
+    return;
+  }
+
+  // Desktop: floating tooltip
   const input = dot.closest('div')?.querySelector('select, input');
   if (input) {
     const rect = input.getBoundingClientRect();
@@ -116,6 +131,13 @@ function showFieldHint(id) {
 function hideFieldHint(id) {
   const dot = document.getElementById(id);
   if (dot) dot.classList.remove('hint-active');
+
+  // Mobile: remove inline hint
+  if (window.innerWidth < 768) {
+    const fieldContainer = dot?.closest('div');
+    const hint = fieldContainer?.querySelector('.inline-hint');
+    if (hint) hint.remove();
+  }
 }
 
 // Show/hide hint dot near a form element (for expense cards without IDs)
