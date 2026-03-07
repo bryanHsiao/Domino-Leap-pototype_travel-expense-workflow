@@ -251,7 +251,10 @@ input:focus, select:focus, textarea:focus {
 
 /* iOS Safari date input fix */
 input[type="date"] {
-  min-width: 0;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden;
 }
 
 /* Mobile: prevent horizontal scroll */
