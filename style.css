@@ -234,15 +234,15 @@ input:focus, select:focus, textarea:focus {
   display: none !important;
   bottom: calc(100% + 8px);
   top: auto;
-  left: 50%;
+  left: -8px;
   right: auto;
-  transform: translateX(-50%);
+  transform: none;
   width: 220px;
 }
 .hint-field .hint-tooltip::after {
-  left: 50%;
+  left: 16px;
   right: auto;
-  transform: translateX(-50%);
+  transform: none;
 }
 .hint-field.hint-active .hint-tooltip,
 .hint-field:hover .hint-tooltip {
@@ -255,6 +255,27 @@ input[type="date"] {
   max-width: 100% !important;
   box-sizing: border-box !important;
   overflow: hidden;
+}
+
+/* Mobile: compact date inputs for 3-col layout */
+@media (max-width: 767px) {
+  .date-input {
+    -webkit-appearance: none;
+    appearance: none;
+    font-size: 12px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+  /* Show date text properly after removing native appearance */
+  .date-input::-webkit-date-and-time-value {
+    text-align: left;
+  }
+  .date-input::-webkit-calendar-picker-indicator {
+    margin: 0;
+    padding: 0;
+    width: 14px;
+    opacity: 0.5;
+  }
 }
 
 /* Mobile: prevent horizontal scroll */

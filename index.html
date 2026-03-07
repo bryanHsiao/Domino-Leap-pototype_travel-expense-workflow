@@ -129,7 +129,7 @@
         </div>
       </div>
       <div class="flex items-center gap-3 md:hidden">
-        <button class="relative text-gray-500 hover:text-gray-700">
+        <button onclick="toggleNotificationPanel()" class="relative text-gray-500 hover:text-gray-700">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
           <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
         </button>
@@ -154,55 +154,55 @@
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
               <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
             </button>
-            <!-- Notification Panel -->
-            <div id="notificationPanel" class="hidden absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 z-50">
-              <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 rounded-t-xl flex items-center justify-between">
-                <span class="text-sm font-semibold text-gray-700">通知</span>
-                <span class="text-[10px] text-primary-600 cursor-pointer hover:underline" onclick="markAllRead()">全部已讀</span>
-              </div>
-              <div id="notificationHintBanner" class="m-2 px-3 py-2 rounded-lg flex items-start gap-2" style="background:#fffbeb;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.1);">
-                <span class="w-4 h-4 rounded-full bg-orange-500 text-white text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5" style="box-shadow: 0 0 0 3px rgba(249,115,22,0.25);">i</span>
-                <p class="text-[11px] leading-relaxed" style="color:#92400e;">通知中心可整合 Email、LINE、Teams 等推播管道，即時通知審核進度與待辦事項。</p>
-              </div>
-              <div class="max-h-64 overflow-y-auto">
-                <div class="px-4 py-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer flex gap-3 bg-primary-50/40">
-                  <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-medium text-gray-800">出差申請待審核</p>
-                    <p class="text-[10px] text-gray-500 mt-0.5">301-001 台中出差已送交主管審核</p>
-                    <p class="text-[10px] text-gray-400 mt-1">10 分鐘前</p>
-                  </div>
-                  <div class="w-2 h-2 bg-primary-500 rounded-full mt-1.5 flex-shrink-0"></div>
-                </div>
-                <div class="px-4 py-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer flex gap-3 bg-primary-50/40">
-                  <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-medium text-gray-800">費用報支已核准</p>
-                    <p class="text-[10px] text-gray-500 mt-0.5">210-007 新竹出差費用已完成核銷</p>
-                    <p class="text-[10px] text-gray-400 mt-1">2 小時前</p>
-                  </div>
-                  <div class="w-2 h-2 bg-primary-500 rounded-full mt-1.5 flex-shrink-0"></div>
-                </div>
-                <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer flex gap-3">
-                  <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs text-gray-600">系統公告</p>
-                    <p class="text-[10px] text-gray-500 mt-0.5">差旅費標準已更新，請查閱最新規定</p>
-                    <p class="text-[10px] text-gray-400 mt-1">昨天</p>
-                  </div>
-                </div>
-              </div>
-              <div class="px-4 py-2.5 bg-gray-50 border-t border-gray-100 rounded-b-xl text-center">
-                <span class="text-xs text-primary-600 cursor-pointer hover:underline">查看全部通知</span>
-              </div>
+          </div>
+        </div>
+      </div>
+      <!-- Notification Panel (shared by mobile & desktop) -->
+      <div id="notificationPanel" class="hidden absolute right-4 top-full mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 z-50">
+        <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 rounded-t-xl flex items-center justify-between">
+          <span class="text-sm font-semibold text-gray-700">通知</span>
+          <span class="text-[10px] text-primary-600 cursor-pointer hover:underline" onclick="markAllRead()">全部已讀</span>
+        </div>
+        <div id="notificationHintBanner" class="m-2 px-3 py-2 rounded-lg flex items-start gap-2" style="background:#fffbeb;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.1);">
+          <span class="w-4 h-4 rounded-full bg-orange-500 text-white text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5" style="box-shadow: 0 0 0 3px rgba(249,115,22,0.25);">i</span>
+          <p class="text-[11px] leading-relaxed" style="color:#92400e;">通知中心可整合 Email、LINE、Teams 等推播管道，即時通知審核進度與待辦事項。</p>
+        </div>
+        <div class="max-h-64 overflow-y-auto">
+          <div class="px-4 py-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer flex gap-3 bg-primary-50/40">
+            <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-medium text-gray-800">出差申請待審核</p>
+              <p class="text-[10px] text-gray-500 mt-0.5">301-001 台中出差已送交主管審核</p>
+              <p class="text-[10px] text-gray-400 mt-1">10 分鐘前</p>
+            </div>
+            <div class="w-2 h-2 bg-primary-500 rounded-full mt-1.5 flex-shrink-0"></div>
+          </div>
+          <div class="px-4 py-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer flex gap-3 bg-primary-50/40">
+            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-medium text-gray-800">費用報支已核准</p>
+              <p class="text-[10px] text-gray-500 mt-0.5">210-007 新竹出差費用已完成核銷</p>
+              <p class="text-[10px] text-gray-400 mt-1">2 小時前</p>
+            </div>
+            <div class="w-2 h-2 bg-primary-500 rounded-full mt-1.5 flex-shrink-0"></div>
+          </div>
+          <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer flex gap-3">
+            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-gray-600">系統公告</p>
+              <p class="text-[10px] text-gray-500 mt-0.5">差旅費標準已更新，請查閱最新規定</p>
+              <p class="text-[10px] text-gray-400 mt-1">昨天</p>
             </div>
           </div>
+        </div>
+        <div class="px-4 py-2.5 bg-gray-50 border-t border-gray-100 rounded-b-xl text-center">
+          <span class="text-xs text-primary-600 cursor-pointer hover:underline">查看全部通知</span>
         </div>
       </div>
     </header>
@@ -318,18 +318,18 @@
               </h3>
             </div>
             <div class="p-4 md:p-6 space-y-3 md:space-y-4 overflow-hidden md:overflow-visible">
-              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+              <div class="grid grid-cols-3 gap-1.5 md:gap-3">
                 <div class="min-w-0 overflow-hidden md:overflow-visible">
-                  <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">出發日期 <span class="text-red-500">*</span></label>
-                  <input type="date" id="startDate" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" onchange="calcDays()" />
+                  <label class="block text-[10px] md:text-sm font-medium text-gray-600 mb-1">出發日期 <span class="text-red-500">*</span></label>
+                  <input type="date" id="startDate" class="date-input w-full px-1.5 md:px-3 py-2 md:py-2.5 border border-gray-300 rounded-lg text-xs md:text-sm" onchange="calcDays()" />
                 </div>
                 <div class="min-w-0 overflow-hidden md:overflow-visible">
-                  <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">結束日期 <span class="text-red-500">*</span></label>
-                  <input type="date" id="endDate" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm" onchange="calcDays()" />
+                  <label class="block text-[10px] md:text-sm font-medium text-gray-600 mb-1">結束日期 <span class="text-red-500">*</span></label>
+                  <input type="date" id="endDate" class="date-input w-full px-1.5 md:px-3 py-2 md:py-2.5 border border-gray-300 rounded-lg text-xs md:text-sm" onchange="calcDays()" />
                 </div>
-                <div class="min-w-0">
-                  <label class="block text-xs md:text-sm font-medium text-gray-600 mb-1">總計天數</label>
-                  <input type="text" id="totalDays" readonly placeholder="自動計算" class="w-full px-3 py-2.5 bg-gray-100 border border-gray-200 rounded-lg text-sm cursor-not-allowed" />
+                <div class="min-w-0 overflow-hidden md:overflow-visible">
+                  <label class="block text-[10px] md:text-sm font-medium text-gray-600 mb-1">總計天數</label>
+                  <input type="text" id="totalDays" readonly placeholder="自動計算" class="w-full px-1.5 md:px-3 py-2 md:py-2.5 bg-gray-100 border border-gray-200 rounded-lg text-xs md:text-sm cursor-not-allowed" />
                 </div>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
