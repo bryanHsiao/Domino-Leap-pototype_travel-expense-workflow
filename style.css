@@ -254,21 +254,29 @@ input[type="date"] {
   min-width: 0;
 }
 
-/* Mobile tooltip overflow prevention */
+/* Mobile: prevent horizontal scroll */
 @media (max-width: 767px) {
-  .hint-dot .hint-tooltip {
-    max-width: calc(100vw - 48px);
+  html, body {
+    overflow-x: hidden;
   }
-  /* Field-level hints: align left to prevent left overflow */
+
+  /* Mobile tooltips: fixed bottom card above nav bar */
+  .hint-dot .hint-tooltip,
   .hint-field .hint-tooltip {
-    left: -8px !important;
-    right: auto !important;
+    position: fixed !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 80px !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: none !important;
     transform: none !important;
   }
+
+  /* Hide arrow on mobile (tooltip no longer anchored) */
+  .hint-dot .hint-tooltip::after,
   .hint-field .hint-tooltip::after {
-    left: 12px !important;
-    right: auto !important;
-    transform: none !important;
+    display: none !important;
   }
 }
 
