@@ -99,33 +99,36 @@ function showFieldHint(id) {
   const dot = document.getElementById(id);
   if (!dot) return;
 
-  // Mobile: inline hint below the field (no floating overlay)
+  const fieldContainer = dot.closest('div');
+  const input = fieldContainer?.querySelector('select, input, textarea');
+
+  // Auto-scroll to ensure space below for dropdowns
+  if (input) {
+    const rect = input.getBoundingClientRect();
+    const viewportH = window.innerHeight;
+    const needed = input.tagName === 'SELECT' ? 300 : 220;
+    const spaceBelow = viewportH - rect.bottom;
+    if (spaceBelow < needed) {
+      const scrollContainer = document.querySelector('main');
+      if (scrollContainer) {
+        scrollContainer.scrollBy({ top: needed - spaceBelow, behavior: 'smooth' });
+      }
+    }
+  }
+
+  // Mobile: inline hint above the input (no floating overlay)
   if (window.innerWidth < 768) {
-    const fieldContainer = dot.closest('div');
-    const input = fieldContainer?.querySelector('select, input, textarea');
     const tooltip = dot.querySelector('.hint-tooltip');
     if (input && tooltip && !fieldContainer.querySelector('.inline-hint')) {
       const hint = document.createElement('div');
       hint.className = 'inline-hint';
       hint.textContent = tooltip.textContent;
-      fieldContainer.appendChild(hint);
+      fieldContainer.insertBefore(hint, input);
     }
     return;
   }
 
   // Desktop: floating tooltip
-  const input = dot.closest('div')?.querySelector('select, input');
-  if (input) {
-    const rect = input.getBoundingClientRect();
-    const viewportH = window.innerHeight;
-    const spaceBelow = viewportH - rect.bottom;
-    if (spaceBelow < 220) {
-      const scrollContainer = document.querySelector('main');
-      if (scrollContainer) {
-        scrollContainer.scrollBy({ top: 220 - spaceBelow, behavior: 'smooth' });
-      }
-    }
-  }
   dot.classList.add('hint-active');
 }
 function hideFieldHint(id) {
