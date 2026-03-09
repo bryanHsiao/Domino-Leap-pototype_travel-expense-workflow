@@ -249,27 +249,89 @@ input:focus, select:focus, textarea:focus {
   display: block !important;
 }
 
-/* Mobile inline hint (replaces floating tooltip on mobile) */
+/* Inline hint base (mobile: stacked inside modal) */
 .inline-hint {
   position: relative;
   background: #fffbeb;
   color: #92400e;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 8px;
-  border: 2px dashed #f97316;
-  font-size: 13px;
+  border: 1.5px dashed #f97316;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1.5;
   margin-top: 4px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .inline-hint::before {
   content: '';
   position: absolute;
   bottom: 100%;
   left: 16px;
-  border: 6px solid transparent;
+  border: 5px solid transparent;
   border-bottom-color: #f97316;
+}
+/* Mobile: alternating left/right offset */
+.inline-hint-right {
+  margin-left: auto;
+  max-width: 88%;
+}
+.inline-hint-right::before {
+  left: auto;
+  right: 16px;
+}
+.inline-hint-left {
+  margin-right: auto;
+  max-width: 88%;
+}
+/* Desktop: float hints outside modal card */
+@media (min-width: 900px) {
+  #roleModalCard {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+  .inline-hint {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .inline-hint-right {
+    position: absolute;
+    left: calc(100% + 48px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    max-width: 200px;
+    margin: 0;
+    z-index: 10;
+  }
+  .inline-hint-right::before {
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 100%;
+    left: auto;
+    border: 6px solid transparent;
+    border-right-color: #f97316;
+  }
+  .inline-hint-left {
+    position: absolute;
+    right: calc(100% + 48px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    max-width: 200px;
+    margin: 0;
+    z-index: 10;
+  }
+  .inline-hint-left::before {
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 100%;
+    right: auto;
+    border: 6px solid transparent;
+    border-left-color: #f97316;
+  }
 }
 
 /* iOS Safari date input fix */

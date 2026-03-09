@@ -135,33 +135,53 @@ function hideFieldHint(id) {
   const dot = document.getElementById(id);
   if (dot) dot.classList.remove('hint-active');
 
-  // Mobile: remove inline hint
-  if (window.innerWidth < 768) {
-    const fieldContainer = dot?.closest('div');
-    const hint = fieldContainer?.querySelector('.inline-hint');
-    if (hint) hint.remove();
-  }
+  // Remove inline hint (always, regardless of current width)
+  const fieldContainer = dot?.closest('div');
+  const hint = fieldContainer?.querySelector('.inline-hint');
+  if (hint) hint.remove();
 }
 
 // Show/hide hint dot near a form element (for expense cards without IDs)
 function showNearHint(el) {
   const dot = el.closest('div')?.querySelector('.hint-dot');
   if (!dot) return;
-  // Auto-scroll to make space below for dropdown + tooltip
+  const fieldContainer = dot.closest('div');
+
+  // Auto-scroll to ensure space below for dropdowns
   const rect = el.getBoundingClientRect();
   const viewportH = window.innerHeight;
+  const needed = el.tagName === 'SELECT' ? 300 : 220;
   const spaceBelow = viewportH - rect.bottom;
-  if (spaceBelow < 220) {
+  if (spaceBelow < needed) {
     const scrollContainer = document.querySelector('main');
     if (scrollContainer) {
-      scrollContainer.scrollBy({ top: 220 - spaceBelow, behavior: 'smooth' });
+      scrollContainer.scrollBy({ top: needed - spaceBelow, behavior: 'smooth' });
     }
   }
+
+  // Mobile: inline hint above the input (no floating overlay)
+  if (window.innerWidth < 768) {
+    const tooltip = dot.querySelector('.hint-tooltip');
+    if (el && tooltip && !fieldContainer.querySelector('.inline-hint')) {
+      const hint = document.createElement('div');
+      hint.className = 'inline-hint';
+      hint.textContent = tooltip.textContent;
+      fieldContainer.insertBefore(hint, el);
+    }
+    return;
+  }
+
+  // Desktop: floating tooltip
   dot.classList.add('hint-active');
 }
 function hideNearHint(el) {
   const dot = el.closest('div')?.querySelector('.hint-dot');
   if (dot) dot.classList.remove('hint-active');
+
+  // Remove inline hint (always, regardless of current width)
+  const fieldContainer = dot?.closest('div');
+  const hint = fieldContainer?.querySelector('.inline-hint');
+  if (hint) hint.remove();
 }
 
 // --- Bottom Tab Bar ---
