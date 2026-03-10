@@ -30,50 +30,48 @@
           <svg class="w-7 h-7 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
         </div>
         <h2 class="text-xl font-bold text-gray-800">出差及報支系統</h2>
-        <p class="text-gray-500 text-sm mt-1">請選擇角色以進入系統</p>
-        <div class="inline-hint inline-hint-left mt-2" style="text-align:left;">此為展示用角色切換頁面。實際系統會依登入帳號自動判定使用者角色與權限，無須手動選擇。</div>
+        <p class="text-gray-500 text-sm mt-1">請選擇角色以進入系統 <span class="hint-dot title-dot" style="display:inline-flex;vertical-align:middle;">i</span></p>
+        <div class="inline-hint inline-hint-right title-hint">此為展示用角色切換頁面。實際系統會依登入帳號自動判定使用者角色與權限，無須手動選擇。</div>
       </div>
       <div class="space-y-2">
         <div class="relative">
           <button onclick="selectRole('employee')" class="w-full flex items-center gap-3 p-3.5 border-2 border-gray-200 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-all group">
             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0"><svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
             <div class="text-left flex-1"><div class="font-semibold text-gray-800 text-sm">一般使用者</div><div class="text-xs text-gray-500">提交出差申請、查詢進度</div></div>
-            <span class="hint-dot" style="position:relative;top:0;right:0;flex-shrink:0;">i</span>
+            <span class="hint-dot hint-dot-right">i</span>
           </button>
-          <div class="inline-hint inline-hint-right">可填寫出差申請、查看申請進度與歷程、報支費用。適用於所有需要出差的員工。</div>
+          <div class="inline-hint inline-hint-right">預設配發全體員工，登入即自動取得此角色。</div>
         </div>
         <div class="relative">
           <button onclick="selectRole('manager')" class="w-full flex items-center gap-3 p-3.5 border-2 border-gray-200 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-all group">
             <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0"><svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
             <div class="text-left flex-1"><div class="font-semibold text-gray-800 text-sm">主管</div><div class="text-xs text-gray-500">審核、批退或核准案件</div></div>
-            <span class="hint-dot" style="position:relative;top:0;right:0;flex-shrink:0;">i</span>
+            <span class="hint-dot hint-dot-right">i</span>
           </button>
-          <div class="inline-hint inline-hint-left">除一般使用者功能外，可審核部屬出差申請、批准或退回案件。實際系統依組織架構自動指派審核人。</div>
+          <div class="inline-hint inline-hint-right">依組織架構自動配發給各部門主管或指定審核人。</div>
         </div>
         <div class="relative">
           <button onclick="selectRole('finance')" class="w-full flex items-center gap-3 p-3.5 border-2 border-gray-200 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-all group">
             <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0"><svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
             <div class="text-left flex-1"><div class="font-semibold text-gray-800 text-sm">財務審核人員</div><div class="text-xs text-gray-500">費用審核與核銷</div></div>
-            <span class="hint-dot" style="position:relative;top:0;right:0;flex-shrink:0;">i</span>
+            <span class="hint-dot hint-dot-right">i</span>
           </button>
-          <div class="inline-hint inline-hint-right">負責審核費用報支單據、核銷金額，可查看全部申請紀錄。實際系統可串接 ERP 進行自動化對帳。</div>
+          <div class="inline-hint inline-hint-right">由管理員指定給財務部門負責核銷的專責人員。</div>
         </div>
         <div class="relative">
           <button onclick="selectRole('admin')" class="w-full flex items-center gap-3 p-3.5 border-2 border-gray-200 rounded-xl hover:border-primary-400 hover:bg-primary-50 transition-all group">
             <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0"><svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
             <div class="text-left flex-1"><div class="font-semibold text-gray-800 text-sm">管理人員</div><div class="text-xs text-gray-500">數據維護、報表分析與導出</div></div>
-            <span class="hint-dot" style="position:relative;top:0;right:0;flex-shrink:0;">i</span>
+            <span class="hint-dot hint-dot-right">i</span>
           </button>
-          <div class="inline-hint inline-hint-left">系統管理角色，可維護人員資料、檢視全部紀錄、產出報表。實際系統可設定多層級管理權限。</div>
+          <div class="inline-hint inline-hint-right">僅配發給 IT 部門或系統管理員，通常少數人擁有。</div>
         </div>
       </div>
       <div class="mt-4 pt-3 border-t border-gray-200 relative">
         <button onclick="quickNewApplication()" class="w-full flex items-center justify-center gap-2 p-3 bg-primary-50 text-primary-700 rounded-xl hover:bg-primary-100 transition-all font-medium text-sm">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           直接填寫出差申請單
-          <span class="hint-dot" style="position:relative;top:0;right:0;flex-shrink:0;">i</span>
         </button>
-        <div class="inline-hint inline-hint-right">快速進入申請表單，以一般使用者身分體驗完整的出差申請流程。</div>
       </div>
     </div>
   </div>

@@ -249,7 +249,7 @@ input:focus, select:focus, textarea:focus {
   display: block !important;
 }
 
-/* Inline hint base (mobile: stacked inside modal) */
+/* Inline hint base (forms: rounded rectangle) */
 .inline-hint {
   position: relative;
   background: #fffbeb;
@@ -271,7 +271,20 @@ input:focus, select:focus, textarea:focus {
   border: 5px solid transparent;
   border-bottom-color: #f97316;
 }
-/* Mobile: alternating left/right offset */
+/* Comic speech bubble (role modal only) */
+#roleModalCard .inline-hint {
+  border-radius: 50%;
+  border: 2px dashed #f97316;
+  padding: 16px 30px;
+  text-align: center;
+  width: fit-content;
+}
+#roleModalCard .inline-hint::before {
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+}
+/* Alternating left/right offset */
 .inline-hint-right {
   margin-left: auto;
   max-width: 88%;
@@ -284,53 +297,267 @@ input:focus, select:focus, textarea:focus {
   margin-right: auto;
   max-width: 88%;
 }
-/* Desktop: float hints outside modal card */
+#roleModalCard .inline-hint-right::before {
+  right: 8px;
+  left: auto;
+  transform: none;
+}
+#roleModalCard .inline-hint-left::before {
+  left: 8px;
+  right: auto;
+  transform: none;
+}
+/* Title hint: beside the system icon */
+#roleModalCard .title-hint {
+  position: absolute;
+  z-index: 5;
+  left: calc(50% + 12px);
+  right: -24px;
+  top: -6px;
+  margin: 0 !important;
+  pointer-events: none;
+  text-align: left;
+  width: auto;
+  border-radius: 14px;
+  padding: 6px 12px;
+}
+#roleModalCard .title-hint::before {
+  display: none;
+}
+/* Title ⓘ: push right so arrow doesn't point at title text */
+#roleModalCard .title-dot {
+  margin-left: 6px;
+}
+/* Title ⓘ: arrow pointing 2 o'clock toward hint box */
+#roleModalCard .title-dot::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: -10px;
+  left: auto;
+  bottom: auto;
+  transform: rotate(60deg);
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-bottom-color: #f97316;
+}
+/* Button hints: absolute position to overlap and save height */
+#roleModalCard .space-y-2 .inline-hint,
+#roleModalCard .mt-4 .inline-hint {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% - 8px);
+  margin: 0 !important;
+  pointer-events: none;
+}
+#roleModalCard .space-y-2 .inline-hint-right,
+#roleModalCard .mt-4 .inline-hint-right {
+  right: -24px;
+  left: auto;
+}
+/* Hide hint box arrow for button hints (arrow now comes from ⓘ dot instead) */
+#roleModalCard .space-y-2 .inline-hint::before,
+#roleModalCard .mt-4 .inline-hint::before {
+  display: none;
+}
+/* ⓘ dot downward arrow pointing to hint box */
+#roleModalCard .space-y-2 .hint-dot-right::after {
+  content: '';
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+  width: 0;
+  height: 0;
+  border: 7px solid transparent;
+  border-top-color: #f97316;
+  margin-top: 1px;
+}
+/* Even items (主管, 管理人員): push hint box far right */
+#roleModalCard .space-y-2 > *:nth-child(even) .inline-hint {
+  right: -160px;
+}
+#roleModalCard .space-y-2 .inline-hint-left,
+#roleModalCard .mt-4 .inline-hint-left {
+  left: -24px;
+  right: auto;
+}
+/* Card-edge hint dots & straddling effect */
+#roleModal {
+  overflow: hidden;
+}
+#roleModalCard {
+  overflow: visible !important;
+}
+#roleModalCard button {
+  position: relative;
+}
+#roleModalCard .hint-dot-right,
+#roleModalCard .hint-dot-left {
+  position: absolute;
+  top: 62%;
+  z-index: 10;
+}
+#roleModalCard .hint-dot-right {
+  right: 16px;
+  transform: translateY(-50%);
+}
+#roleModalCard .hint-dot-left {
+  left: -16px;
+  transform: translate(-50%, -50%);
+}
+/* Desktop: hints inside modal, compact pill shape */
 @media (min-width: 900px) {
   #roleModalCard {
-    overflow: visible !important;
     max-height: none !important;
   }
-  .inline-hint {
-    margin-top: 0;
-    margin-bottom: 0;
+  #roleModalCard .inline-hint {
+    border-radius: 24px;
+    padding: 6px 18px;
+    font-size: 12px;
+    margin-top: 2px;
+    margin-bottom: 2px;
   }
-  .inline-hint-right {
-    position: absolute;
-    left: calc(100% + 48px);
-    top: 50%;
-    transform: translateY(-50%);
-    width: 200px;
-    max-width: 200px;
-    margin: 0;
-    z-index: 10;
+  #roleModalCard .text-center.mb-5 {
+    margin-bottom: 10px !important;
   }
-  .inline-hint-right::before {
-    bottom: auto;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 100%;
-    left: auto;
-    border: 6px solid transparent;
-    border-right-color: #f97316;
+  #roleModalCard .space-y-2 > * + * {
+    margin-top: 5px !important;
   }
-  .inline-hint-left {
-    position: absolute;
-    right: calc(100% + 48px);
-    top: 50%;
-    transform: translateY(-50%);
-    width: 200px;
-    max-width: 200px;
-    margin: 0;
-    z-index: 10;
+  #roleModalCard .space-y-2 button {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
   }
-  .inline-hint-left::before {
-    bottom: auto;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 100%;
+  #roleModalCard .title-hint {
+    left: calc(50% + 79px);
     right: auto;
-    border: 6px solid transparent;
-    border-left-color: #f97316;
+    top: 32px;
+    width: max-content;
+    max-width: 240px;
+  }
+  #roleModalCard .hint-dot-right {
+    right: 18px;
+  }
+  #roleModalCard .hint-dot-left {
+    left: -32px;
+  }
+  #roleModalCard .inline-hint-right {
+    margin-right: -40px;
+  }
+  #roleModalCard .inline-hint-left {
+    margin-left: -40px;
+  }
+  #roleModalCard .space-y-2 .inline-hint-right,
+  #roleModalCard .mt-4 .inline-hint-right {
+    right: -40px;
+  }
+  #roleModalCard .space-y-2 .inline-hint-left,
+  #roleModalCard .mt-4 .inline-hint-left {
+    left: -40px;
+  }
+  /* Desktop: even items push further right */
+  #roleModalCard .space-y-2 > *:nth-child(even) .inline-hint {
+    right: -200px;
+  }
+}
+/* Mobile: compact comic bubbles to fit one screen */
+@media (max-width: 899px) {
+  #roleModalCard {
+    padding: 16px !important;
+  }
+  #roleModalCard .text-center.mb-5 {
+    margin-bottom: 8px !important;
+  }
+  #roleModalCard .inline-hint {
+    border-radius: 18px;
+    padding: 5px 14px;
+    font-size: 11px;
+    line-height: 1.35;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+  #roleModalCard .space-y-2 > * + * {
+    margin-top: 14px !important;
+  }
+  #roleModalCard .space-y-2 button {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+  #roleModalCard .mt-4 {
+    margin-top: 14px !important;
+    padding-top: 14px !important;
+  }
+  #roleModalCard .w-14 {
+    width: 40px !important;
+    height: 40px !important;
+    margin-bottom: 4px !important;
+  }
+  #roleModalCard .w-14 svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  /* Hint straddling effect (title hint only, button hints use absolute) */
+  #roleModalCard .inline-hint-right {
+    margin-right: -24px;
+  }
+  #roleModalCard .inline-hint-left {
+    margin-left: -24px;
+  }
+  /* Mobile: title hint as full-width block with ⓘ inside */
+  #roleModalCard .title-hint {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    width: auto;
+    max-width: none;
+    border-radius: 14px;
+    padding: 8px 14px;
+    margin: 8px 0 8px 0 !important;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  /* Mobile: ⓘ icon inside hint box */
+  #roleModalCard .title-hint::before {
+    display: flex !important;
+    content: 'i';
+    min-width: 20px;
+    width: 20px;
+    height: 20px;
+    background: #f97316;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: italic;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transform: none;
+    position: static;
+    margin-top: 1px;
+  }
+  /* Mobile: upward triangle above hint box */
+  #roleModalCard .title-hint::after {
+    content: '';
+    position: absolute;
+    top: -12.5px;
+    left: 140px;
+    width: 0;
+    height: 0;
+    border: 7px solid transparent;
+    border-bottom-color: #f97316;
+  }
+  /* Mobile: hide separate ⓘ dot next to subtitle */
+  #roleModalCard .title-dot {
+    display: none !important;
+  }
+  /* Mobile: even items moderate right offset */
+  #roleModalCard .space-y-2 > *:nth-child(even) .inline-hint {
+    right: -30px;
+    max-width: 170px;
   }
 }
 
